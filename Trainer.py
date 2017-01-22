@@ -3,6 +3,7 @@
 import argparse # parse input arguments
 import numpy as np # arithmetic library
 import KerasDQNAgent
+import CartPolev0Env
 import Detached2DCartPolev0Env
 import time
 
@@ -46,7 +47,9 @@ class Trainer:
 		# setup environment
 		if opts.env == 'Detached2DCartPolev0Env':
 			env = Detached2DCartPolev0Env.Detached2DCartPolev0(opts)
-			# add more environments as you build them
+		elif opts.env == 'CartPolev0Env':
+			env = CartPolev0Env.CartPolev0(opts)
+		# add more environments as you build them
 		
 		if agent.metadata['discrete_actions'] != env.metadata['discrete_actions']:
 			print "Incompatible agent/environment pair!"
