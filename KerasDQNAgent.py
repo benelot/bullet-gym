@@ -59,6 +59,6 @@ class KerasDQNAgent(object):
     def load_weights(self, load_file):
         self.dqn.load_weights(load_file)
     
-    def save_weights(self, save_file):
-        self.dqn.save_weights(save_file)
+    def save_weights(self, save_file, overwrite):
+        self.dqn.save_weights(save_file, overwrite)
         
