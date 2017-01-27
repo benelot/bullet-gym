@@ -19,20 +19,21 @@ import time
 np.set_printoptions(precision=3, suppress=True, linewidth=10000)
 
 def add_opts(parser):
-	parser.add_argument('--delay', type=float, default=0.0)
-	parser.add_argument('--action-force', type=float, default=50.0,
-                      help="magnitude of action force applied per step")
-	parser.add_argument('--initial-force', type=float, default=55.0,
-                      help="magnitude of initial push, in random direction")
-	parser.add_argument('--no-random-theta', action='store_true')
-	parser.add_argument('--action-repeats', type=int, default=2,
-                      help="number of action repeats")
-	parser.add_argument('--steps-per-repeat', type=int, default=5,
-                      help="number of sim steps per repeat")
-	parser.add_argument('--max-episode-len', type=int, default=200,
-                      help="maximum episode len for cartpole")
-	parser.add_argument('--reward-calc', type=str, default='fixed',
-                      help="'fixed': 1 per step. 'angle': 2*max_angle - ox - oy. 'action': 1.5 - |action|. 'angle_action': both angle and action")
+	pass
+#	parser.add_argument('--delay', type=float, default=0.0)
+#	parser.add_argument('--action-force', type=float, default=50.0,
+#                      help="magnitude of action force applied per step")
+#	parser.add_argument('--initial-force', type=float, default=55.0,
+#                      help="magnitude of initial push, in random direction")
+#	parser.add_argument('--no-random-theta', action='store_true')
+#	parser.add_argument('--action-repeats', type=int, default=2,
+#                      help="number of action repeats")
+#	parser.add_argument('--steps-per-repeat', type=int, default=5,
+#                      help="number of sim steps per repeat")
+#	parser.add_argument('--max-episode-len', type=int, default=200,
+#                      help="maximum episode len for cartpole")
+#	parser.add_argument('--reward-calc', type=str, default='fixed',
+#                      help="'fixed': 1 per step. 'angle': 2*max_angle - ox - oy. 'action': 1.5 - |action|. 'angle_action': both angle and action")
 def state_fields_of_pose_of(body_id, link_id=-1):
 	if link_id == -1:
 		(x,y,z), (a,b,c,d) = p.getBasePositionAndOrientation(body_id)
@@ -49,6 +50,7 @@ class CartPolev0(gym.Env):
 		
 		self.metadata = {
 			'discrete_actions' : True,
+			'continuous_actions': True,
             'render.modes': ['human', 'rgb_array'],
             'video.frames_per_second' : int(np.round(1.0 / 25.0))
         }

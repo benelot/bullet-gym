@@ -3,6 +3,7 @@
 import argparse # parse input arguments
 import numpy as np # arithmetic library
 import KerasDQNAgent
+#import DDPGAgent
 import CartPolev0Env
 import Detached2DCartPolev0Env
 import time
@@ -24,9 +25,11 @@ def add_opts(parser):
 	# add here all options of all agents and all environments
 	# agents
 	KerasDQNAgent.add_opts(parser)
+	#DDPGAgent.add_opts(parser)
 
 	# environments
 	Detached2DCartPolev0Env.add_opts(parser)
+	CartPolev0Env.add_opts(parser)
 
 
 class Trainer:
@@ -42,7 +45,10 @@ class Trainer:
 		# setup agent
 		if opts.agent == 'KerasDQNAgent':
 			agent = KerasDQNAgent.KerasDQNAgent()
-			# add more agents as you build them
+		elif opts.agent == 'DDPGAgent':
+			pass
+		#	agent = DDPGAgent.DDPGAgent()
+		# add more agents as you build them
 
 		# setup environment
 		if opts.env == 'Detached2DCartPolev0Env':
