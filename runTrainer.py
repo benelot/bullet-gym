@@ -17,8 +17,9 @@ parser = argparse.ArgumentParser()
 Trainer.add_opts(parser)
 
 # parse arguments
-opts = parser.parse_args()
+opts, unknown = parser.parse_known_args()
 print "OPTS", opts
+print "UNKNOWN", unknown
 
     
 trainer.setup_exercise(opts)

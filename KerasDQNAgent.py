@@ -21,10 +21,7 @@ class KerasDQNAgent(object):
     '''
 
 
-    def __init__(self, ):
-        '''
-        Constructor
-        '''
+    def __init__(self):
         self.metadata = {
             'discrete_actions' : True,
         }

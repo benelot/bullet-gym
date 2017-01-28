@@ -2,10 +2,6 @@
 
 import argparse # parse input arguments
 import numpy as np # arithmetic library
-import KerasDQNAgent
-#import DDPGAgent
-import CartPolev0Env
-import Detached2DCartPolev0Env
 import time
 
 np.set_printoptions(precision=3, suppress=True, linewidth=10000)
@@ -21,41 +17,35 @@ def add_opts(parser):
 	parser.add_argument('--save-file', type=str, default=None)
 	parser.add_argument('--gui', action='store_true', help="Should GUI be shown during this session?")
 	
+	opts, unknown = parser.parse_known_args() # parse agent and environment to add their opts
+
+	exec "import %s" % opts.agent # import agent type
+	exec "import %s" % opts.env # import env type
+	exec "%s.add_opts(parser)" % opts.agent
+	exec "%s.add_opts(parser)" % opts.env 
 	
-	# add here all options of all agents and all environments
-	# agents
-	KerasDQNAgent.add_opts(parser)
-	#DDPGAgent.add_opts(parser)
-
-	# environments
-	Detached2DCartPolev0Env.add_opts(parser)
-	CartPolev0Env.add_opts(parser)
-
 
 class Trainer:
 
 	def __init__(self):
-		parser = argparse.ArgumentParser()
-		add_opts(parser)
-		opts = parser.parse_args()
-		print "OPTS", opts
+		pass
+# 		parser = argparse.ArgumentParser()
+# 		add_opts(parser)
+# 		opts, unknown = parser.parse_known_args()
+# 		print "OPTS", opts
 		
 	def setup_exercise(self, opts):
 		
+		exec "import %s" % opts.agent # import agent type
+		exec "import %s" % opts.env # import env type
+		
 		# setup agent
-		if opts.agent == 'KerasDQNAgent':
-			agent = KerasDQNAgent.KerasDQNAgent()
-		elif opts.agent == 'DDPGAgent':
-			pass
-		#	agent = DDPGAgent.DDPGAgent()
-		# add more agents as you build them
+		agent = 0 # just to mute the ide
+		exec "agent = %s.%s()" % (opts.agent, opts.agent)
 
 		# setup environment
-		if opts.env == 'Detached2DCartPolev0Env':
-			env = Detached2DCartPolev0Env.Detached2DCartPolev0(opts)
-		elif opts.env == 'CartPolev0Env':
-			env = CartPolev0Env.CartPolev0(opts)
-		# add more environments as you build them
+		env = 0 # just to mute the ide
+		exec "env = %s.%s(opts)" % (opts.env, opts.env)
 		
 		if agent.metadata['discrete_actions'] != env.metadata['discrete_actions']:
 			print "Incompatible agent/environment pair!"

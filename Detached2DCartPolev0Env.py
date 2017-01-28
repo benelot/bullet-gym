@@ -37,7 +37,7 @@ def state_fields_of_pose_of(body_id):
 	(x,y,z), (a,b,c,d) = p.getBasePositionAndOrientation(body_id)
 	return np.array([x,y,z,a,b,c,d])
 
-class Detached2DCartPolev0(gym.Env):
+class Detached2DCartPolev0Env(gym.Env):
 	
 	def __init__(self, opts):
 		self.gui = opts.gui
