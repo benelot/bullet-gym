@@ -1,21 +1,19 @@
 #!/usr/bin/env python
 
-# based on https://github.com/matthiasplappert/keras-rl/blob/master/examples/dqn_cartpole.py
-# with some extra arg parsing
+# Keras DDQN Agent
 
 from keras.models import Sequential # The Sequential model is a sequential, feed-forward stack of layers.
 from keras.layers import Dense, Activation, Flatten # Different types of layers
 from keras.optimizers import Adam # A special type of optimizer
 
-from rl.agents.dqn import DQNAgent # The deep Q Learning Agent as described in https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf
+from rl.agents.dqn import DQNAgent # The deep Double Q Learning Agent as described in https://arxiv.org/abs/1509.06461
 from rl.policy import BoltzmannQPolicy # Instead of random actions, we tend to pick actions that have generated rewards before. As time goes on we only focus on one or two actions in each state.
 from rl.memory import SequentialMemory # A first-in-first-out type of memory to do the experience replay on
-
 
 def add_opts(parser):
     pass
 
-class KerasDQNAgent(object):
+class KerasDDQNAgent(object):
     '''
     classdocs
     '''
@@ -45,7 +43,7 @@ class KerasDQNAgent(object):
 
         memory = SequentialMemory(limit=50000, window_length=1)
         policy = BoltzmannQPolicy()
-        self.agent = DQNAgent(enable_double_dqn = False, model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10,
+        self.agent = DQNAgent(enable_double_dqn = True, model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10,
                target_model_update=1e-2, policy=policy)
         self.agent.compile(Adam(lr=1e-3), metrics=['mae'])
         

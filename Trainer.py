@@ -29,10 +29,6 @@ class Trainer:
 
 	def __init__(self):
 		pass
-# 		parser = argparse.ArgumentParser()
-# 		add_opts(parser)
-# 		opts, unknown = parser.parse_known_args()
-# 		print "OPTS", opts
 		
 	def setup_exercise(self, opts):
 		
@@ -41,7 +37,7 @@ class Trainer:
 		
 		# setup agent
 		agent = 0 # just to mute the ide
-		exec "agent = %s.%s()" % (opts.agent, opts.agent)
+		exec "agent = %s.%s(opts)" % (opts.agent, opts.agent)
 
 		# setup environment
 		env = 0 # just to mute the ide
@@ -53,7 +49,10 @@ class Trainer:
 		# configurations
 		env.seed(int(time.time()))
 		env.configureActions(agent.metadata['discrete_actions']) # configure environment to accepts discrete actions
-		agent.configure(env.observation_space.shape, env.action_space.n) # configure agent to use the environment properties
+		if agent.metadata['discrete_actions'] == True:
+			agent.configure(env.observation_space.shape, env.action_space.n) # configure agent to use the environment properties
+		else:
+			agent.configure(env.observation_space.shape, env.action_space.shape[0]) # configure agent to use the environment properties
 		
 		if opts.load_file is not None:
 			print "loading weights from from [%s]" % opts.load_file

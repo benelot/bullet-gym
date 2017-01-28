@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # A pole is attached by an un-actuated joint to a cart, which moves along a frictionless track. 
-# The system is controlled by applying a force of +1 or -1 to the cart. The pendulum starts upright, and the goal is to prevent it from falling over. 
+# The system is controlled by applying a force of +action_force or -action_force to the cart. The pendulum starts upright and gets a small, initial hit, and the goal is to prevent it from falling over. 
 # A reward of +1 is provided for every timestep that the pole remains upright. 
 # The episode ends when the pole is more than 15 degrees from vertical, or the cart moves more than 2.4 units from the center.
 #
@@ -30,7 +30,7 @@ def add_opts(parser):
 	parser.add_argument('--steps-per-repeat', type=int, default=5,
                       help="number of sim steps per repeat")
 	parser.add_argument('--max-episode-len', type=int, default=200,
-                      help="maximum episode len for cartpole")
+                      help="maximum episode length for cartpole")
 	parser.add_argument('--reward-calc', type=str, default='fixed',
                       help="'fixed': 1 per step. 'angle': 2*max_angle - ox - oy. 'action': 1.5 - |action|. 'angle_action': both angle and action")
 def state_fields_of_pose_of(body_id, link_id=-1):
@@ -173,7 +173,7 @@ class CartPolev0Env(gym.Env):
 			info['done_reason'] = 'out of position bounds'
 			self.done = True
 			reward = 0.0
-		elif abs(ox) > self.angle_threshold:
+		elif abs(oy) > self.angle_threshold:
 			# TODO: probably better to do explicit angle from z?
 			info['done_reason'] = 'out of orientation bounds'
 			self.done = True
@@ -187,7 +187,7 @@ class CartPolev0Env(gym.Env):
 		reward = 1.0
 		if self.reward_calc == "angle" or self.reward_calc == "angle_action":
 			# clip to zero since angles can be past threshold
-			reward += max(0, 2 * self.angle_threshold - np.abs(ox) - np.abs(oy))
+			reward += max(0, 2 * self.angle_threshold - np.abs(ox))
 		if self.reward_calc == "action" or self.reward_calc == "angle_action":
 			# max norm will be sqr(2) ~= 1.4.
 			# reward is already 1.0 to add another 0.5 as o0.1 buffer from zero
@@ -213,10 +213,10 @@ class CartPolev0Env(gym.Env):
 		for _ in xrange(100): p.stepSimulation()
 
 		# give a fixed force push in a random direction to get things going...
-		theta = 10 * (np.random.random() - 2) if self.random_theta else 0.0
+		theta = (np.random.random()*2-1) if self.random_theta else 0.0
 		for _ in xrange(self.initial_force_steps):
 			p.stepSimulation()
-			p.applyExternalForce(self.cartpole, -1, (theta, 0 , 0), (0, 0, 0), p.WORLD_FRAME)
+			p.applyExternalForce(self.cartpole, 0, (theta, 0 , 0), (0, 0, 0), p.WORLD_FRAME)
 			if self.delay > 0:
 				time.sleep(self.delay)
 

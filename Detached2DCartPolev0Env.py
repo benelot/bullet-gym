@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # A pole is attached by an un-actuated joint to a cart, which moves along a frictionless track. 
-# The system is controlled by applying a force of +1 or -1 to the cart. The pendulum starts upright, and the goal is to prevent it from falling over. 
+# The system is controlled by applying a force of +action_force or -action_force to the cart. The pendulum starts upright and gets a small, initial hit, and the goal is to prevent it from falling over. 
 # A reward of +1 is provided for every timestep that the pole remains upright. 
 # The episode ends when the pole is more than 15 degrees from vertical, or the cart moves more than 2.4 units from the center.
 #
@@ -30,7 +30,7 @@ def add_opts(parser):
 	parser.add_argument('--steps-per-repeat', type=int, default=5,
                       help="number of sim steps per repeat")
 	parser.add_argument('--max-episode-len', type=int, default=200,
-                      help="maximum episode len for cartpole")
+                      help="maximum episode length for cartpole")
 	parser.add_argument('--reward-calc', type=str, default='fixed',
                       help="'fixed': 1 per step. 'angle': 2*max_angle - ox - oy. 'action': 1.5 - |action|. 'angle_action': both angle and action")
 def state_fields_of_pose_of(body_id):
@@ -46,6 +46,7 @@ class Detached2DCartPolev0Env(gym.Env):
 		
 		self.metadata = {
 			'discrete_actions' : True,
+			'continuous_actions': True,
             'render.modes': ['human', 'rgb_array'],
             'video.frames_per_second' : int(np.round(1.0 / 25.0))
         }
@@ -73,7 +74,7 @@ class Detached2DCartPolev0Env(gym.Env):
 		self.initial_force_steps = 30
 		
 		# whether we do initial push in a random direction
-		# if false we always push with along x-axis (simplee problem, useful for debugging)
+		# if false we always push with along x-axis (simple problem, useful for debugging)
 		self.random_theta = not opts.no_random_theta
 			
 		# how many time to repeat each action per step().
@@ -99,8 +100,8 @@ class Detached2DCartPolev0Env(gym.Env):
 		p.connect(p.GUI if self.gui else p.DIRECT)
 		p.setGravity(0, 0, -9.81)
 		p.loadURDF("cartpole-env/ground.urdf", 0,0,0, 0,0,0,1)
-		self.cart = p.loadURDF("cartpole-env/cart.urdf", 0,0,0.08, 0,0,0,1)
-		self.pole = p.loadURDF("cartpole-env/pole.urdf", 0,0,0.35, 0,0,0,1)
+		self.cart = p.loadURDF("cartpole-env/cart.urdf", 0,0,0.025, 0,0,0,1)
+		self.pole = p.loadURDF("cartpole-env/pole.urdf", 0,0,0.275, 0,0,0,1)
 		
 	def configureActions(self, discrete_actions):
 		
@@ -111,9 +112,9 @@ class Detached2DCartPolev0Env(gym.Env):
 		# 5 discrete actions: no push, left, right
 		# 2 continuous action elements; fx & fy
 		if self.discrete_actions:
-			self.action_space = spaces.Discrete(3)
+			self.action_space = spaces.Discrete(5)
 		else:
-			self.action_space = spaces.Box(-1.0, 1.0, shape=(1, 2))
+			self.action_space = spaces.Box(-1.0, 1.0, shape=(2,))
 		
 		# Our observations can be within this box
 		float_max = np.finfo(np.float32).max
@@ -145,17 +146,21 @@ class Detached2DCartPolev0Env(gym.Env):
 				fx = self.action_force
 			elif action == 2:
 				fx = -self.action_force
+			elif action == 3:
+				fy = self.action_force
+			elif action == 4:
+				fy = -self.action_force
 			else:
 				raise Exception("unknown discrete action [%s]" % action)
 		else: # continuous actions
-			fx, fy = action[0] * self.action_force
+			fx, fy = action * self.action_force
 
 		# step simulation forward. at the end of each repeat we set part of the step's
 		# state by capture the cart & pole state in some form.
 		for r in xrange(self.repeats):
 			for _ in xrange(self.steps_per_repeat):
 				p.stepSimulation()
-				p.applyExternalForce(self.cart, -1, (fx,0,0), (0,0,0), p.WORLD_FRAME)
+				p.applyExternalForce(self.cart, -1, (fx,fy,0), (0,0,0), p.WORLD_FRAME)
 				if self.delay > 0:
 					time.sleep(self.delay)
 			self.set_state_element_for_repeat(r)
@@ -164,8 +169,9 @@ class Detached2DCartPolev0Env(gym.Env):
 		# Check for out of bounds by position or orientation on pole.
 		# we (re)fetch pose explicitly rather than depending on fields in state.
 		(x, y, _z), orient = p.getBasePositionAndOrientation(self.pole)
+		(cx, cy, cz), corient = p.getBasePositionAndOrientation(self.cart)
 		ox, oy, _oz = p.getEulerFromQuaternion(orient)  # roll / pitch / yaw
-		if abs(x) > self.pos_threshold or abs(y) > self.pos_threshold:
+		if abs(x) > self.pos_threshold or abs(y) > self.pos_threshold or abs(cx) > self.pos_threshold or abs(cy) > self.pos_threshold: # cart and pole can not escape a certain box
 			info['done_reason'] = 'out of position bounds'
 			self.done = True
 			reward = 0.0
@@ -209,10 +215,11 @@ class Detached2DCartPolev0Env(gym.Env):
 		for _ in xrange(100): p.stepSimulation()
 
 		# give a fixed force push in a random direction to get things going...
-		theta = (np.random.random() - 2) if self.random_theta else 0.0
+		theta = np.multiply(np.multiply((np.random.random(), np.random.random(), 0),2) - (1,1,0),5) if self.random_theta else (1,0,0)
+		
 		for _ in xrange(self.initial_force_steps):
 			p.stepSimulation()
-			p.applyExternalForce(self.cart, -1, (theta, 0 , 0), (0, 0, 0), p.WORLD_FRAME)
+			p.applyExternalForce(self.pole, -1, theta, (0, 0, 0), p.WORLD_FRAME)
 			if self.delay > 0:
 				time.sleep(self.delay)
 
