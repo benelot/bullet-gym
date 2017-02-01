@@ -19,8 +19,8 @@ def add_opts(parser):
 	
 	opts, unknown = parser.parse_known_args() # parse agent and environment to add their opts
 
-	exec "import %s" % opts.agent # import agent type
-	exec "import %s" % opts.env # import env type
+	exec "from agents import %s" % opts.agent # import agent type
+	exec "from envs import %s" % opts.env # import env type
 	exec "%s.add_opts(parser)" % opts.agent
 	exec "%s.add_opts(parser)" % opts.env 
 	
@@ -32,8 +32,8 @@ class Trainer:
 		
 	def setup_exercise(self, opts):
 		
-		exec "import %s" % opts.agent # import agent type
-		exec "import %s" % opts.env # import env type
+		exec "from agents import %s" % opts.agent # import agent type
+		exec "from envs import %s" % opts.env # import env type
 		
 		# setup agent
 		agent = 0 # just to mute the ide
@@ -55,7 +55,7 @@ class Trainer:
 			agent.configure(env.observation_space.shape, env.action_space.shape[0]) # configure agent to use the environment properties
 		
 		if opts.load_file is not None:
-			print "loading weights from from [%s]" % opts.load_file
+			print "loading weights from [%s]" % opts.load_file
 			agent.load_weights(opts.load_file)
 		
 		# Okay, now it's time to learn something! We visualize the training here for show, but this
