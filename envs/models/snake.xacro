@@ -20,18 +20,18 @@
 				<geometry>
 					<cylinder length="${link_length}" radius="${link_radius}" />
 				</geometry>
-				<origin xyz="0 0 -${link_length/2}" rpy="0 0 0" />
+				<origin xyz="-${link_length/2} 0 0" rpy="0 ${pi/2} 0" />
 			</collision>
 
 			<visual>
 				<geometry>
 					<cylinder length="${link_length}" radius="${link_radius}" />
 				</geometry>
-				<origin xyz="0 0 -${link_length/2}" rpy="0 0 0" />
+				<origin xyz="-${link_length/2} 0 0" rpy="0 ${pi/2} 0" />
 			</visual>
 
 			<inertial>
-				<origin xyz="0 0 -${link_length/2}" rpy="0 0 0" />
+				<origin xyz="-${link_length/2} 0 0" rpy="0 ${pi/2} 0" />
 				<mass value="0.159" />
 				<inertia ixx="0.00006" iyy="0.00006" izz="0.00006" ixy="0" ixz="0" iyz="0" />
 			</inertial>
@@ -51,12 +51,12 @@
 	<xacro:macro name="spring_joint" params="parent child axis">
 		<!-- Springy joint -->
 		<joint name="joint_${parent}_m" type="revolute">
-			<limit effort="1000.0" lower="-${pi/2}" upper="${pi/2}"
+			<limit effort="1000.0" lower="0" upper="${pi}"
 				velocity="10" />
 			<dynamics damping="${joint_damping}" friction="${joint_friction}" />
 			<parent link="module_${parent}" />
 			<child link="spring_${parent}" />
-			<origin xyz="0 0 -${link_length}" />
+			<origin xyz="-${link_length} 0 0" />
 			<axis xyz="${axis}" />
 		</joint>
 		<link name="spring_${parent}">
@@ -64,7 +64,7 @@
 				<geometry>
 					<cylinder length="${2*link_radius}" radius=".001" />
 				</geometry>
-				<origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+				<origin xyz="0 0 0" rpy="${pi} 0 0" />
 			</visual>
 			<inertial>
 				<mass value="${spring_mass}" />
@@ -73,7 +73,7 @@
 			</inertial>
 		</link>
 		<joint name="joint_${parent}_${child}" type="revolute">
-			<limit effort="1000.0" lower="-${pi/2}" upper="${pi/2}"
+			<limit effort="1000.0" lower="0" upper="${pi}"
 				velocity="10" />
 			<!-- <dynamics damping="${damping}" friction="${friction}" /> -->
 			<parent link="spring_${parent}" />
@@ -87,12 +87,12 @@
 	<xacro:macro name="simple_joint" params="parent child axis">
 		<!-- Simple joint -->
 		<joint name="joint_${parent}_${child}" type="revolute">
-			<limit effort="1000.0" lower="-${pi/2}" upper="${pi/2}"
+			<limit effort="1000.0" lower="0" upper="${pi}"
 				velocity="10" />
 			<dynamics damping="${joint_damping}" friction="${joint_friction}" />
 			<parent link="module_${parent}" />
 			<child link="module_${child}" />
-			<origin xyz="0 0 -${link_length}" />
+			<origin xyz="-${link_length} 0 0" />
 			<axis xyz="${axis}" />
 		</joint>
 	</xacro:macro>
