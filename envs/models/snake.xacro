@@ -3,19 +3,21 @@
 <robot name="snake" xmlns:xacro="http://www.ros.org/wiki/xacro">
 	
 	<!-- snake properties -->
-	<xacro:property name="num_links" value ="5" />
-	<xacro:property name="link_length" value="0.5" />
+	<xacro:property name="num_links" value ="8" />
+	<xacro:property name="link_length" value="0.2" />
 	<xacro:property name="link_radius" value="0.025" />
 	<xacro:property name="link_mass" value="0.2" />
 	<xacro:property name="joint_friction" value="0.2" />
 	<xacro:property name="joint_damping" value="0.001" />
-	<xacro:property name="spring_mass" value="0.001" />
-	<xacro:property name="spring_inertia" value="0.0" />
+	<xacro:property name="spring_mass" value="0.01" />
+	<xacro:property name="spring_inertia" value="0.000006" />
 	<xacro:property name="pi" value="3.1415" />
 	<xacro:property name="joint_type" value="1" /> <!-- 1=simple_joint -1=springy_joint -->
+	<xacro:property name="joint_minLimit" value="-${pi}/2" />
+	<xacro:property name="joint_maxLimit" value="${pi}/2" />
 
 	<xacro:macro name="snake_link" params="number">
-		<link name="module_${number}">
+		<link name="link_${number}">
 			<collision>
 				<geometry>
 					<cylinder length="${link_length}" radius="${link_radius}" />
@@ -31,8 +33,8 @@
 			</visual>
 
 			<inertial>
-				<origin xyz="-${link_length/2} 0 0" rpy="0 ${pi/2} 0" />
-				<mass value="0.159" />
+				<origin xyz="-${link_length/2} 0 0" rpy="0 0 0" />
+				<mass value="${link_mass}" />
 				<inertia ixx="0.00006" iyy="0.00006" izz="0.00006" ixy="0" ixz="0" iyz="0" />
 			</inertial>
 		</link>   
@@ -51,10 +53,9 @@
 	<xacro:macro name="spring_joint" params="parent child axis">
 		<!-- Springy joint -->
 		<joint name="joint_${parent}_m" type="revolute">
-			<limit effort="1000.0" lower="0" upper="${pi}"
-				velocity="10" />
+			<limit effort="1000.0" lower="${joint_minLimit}" upper="${joint_maxLimit}" velocity="10" />
 			<dynamics damping="${joint_damping}" friction="${joint_friction}" />
-			<parent link="module_${parent}" />
+			<parent link="link_${parent}" />
 			<child link="spring_${parent}" />
 			<origin xyz="-${link_length} 0 0" />
 			<axis xyz="${axis}" />
@@ -62,22 +63,20 @@
 		<link name="spring_${parent}">
 			<visual>
 				<geometry>
-					<cylinder length="${2*link_radius}" radius=".001" />
+					<cylinder length="${2*link_radius}" radius="0.001" />
 				</geometry>
 				<origin xyz="0 0 0" rpy="${pi} 0 0" />
 			</visual>
 			<inertial>
 				<mass value="${spring_mass}" />
-				<inertia ixx="${spring_inertia}" ixy="0.0" ixz="0.0"
-					iyy="${spring_inertia}" iyz="0.0" izz="${spring_inertia}" />
+				<inertia ixx="${spring_inertia}" ixy="0.0" ixz="0.0" iyy="${spring_inertia}" iyz="0.0" izz="${spring_inertia}" />
 			</inertial>
 		</link>
 		<joint name="joint_${parent}_${child}" type="revolute">
-			<limit effort="1000.0" lower="0" upper="${pi}"
-				velocity="10" />
-			<!-- <dynamics damping="${damping}" friction="${friction}" /> -->
+			<limit effort="1000.0" lower="${joint_minLimit}" upper="${joint_maxLimit}" velocity="10" />
+			<dynamics damping="${joint_damping}" friction="${joint_friction}" />
 			<parent link="spring_${parent}" />
-			<child link="module_${child}" />
+			<child link="link_${child}" />
 			<origin xyz="0 0 0" rpy="0 0 0" />
 			<axis xyz="${axis}" />
 		</joint>
@@ -87,11 +86,10 @@
 	<xacro:macro name="simple_joint" params="parent child axis">
 		<!-- Simple joint -->
 		<joint name="joint_${parent}_${child}" type="revolute">
-			<limit effort="1000.0" lower="0" upper="${pi}"
-				velocity="10" />
+			<limit effort="1000.0" lower="${joint_minLimit}" upper="${joint_maxLimit}" velocity="10" />
 			<dynamics damping="${joint_damping}" friction="${joint_friction}" />
-			<parent link="module_${parent}" />
-			<child link="module_${child}" />
+			<parent link="link_${parent}" />
+			<child link="link_${child}" />
 			<origin xyz="-${link_length} 0 0" />
 			<axis xyz="${axis}" />
 		</joint>

@@ -7,475 +7,275 @@
   <!-- snake properties -->
   <!-- 1=simple_joint -1=springy_joint -->
   <!-- Spring joints are joints with a center springy link-->
-  <!-- Spring joint revolute -->
-  <!-- Spring joint spherical -->
   <!-- Simple joints are simple, lightly damped and frictioned joints-->
-  <!-- -->
-  <!-- Simple joint spherical -->
-  <link name="module_15">
+  <link name="link_8">
     <collision>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </collision>
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </visual>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
+      <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+      <mass value="0.2"/>
       <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
     </inertial>
   </link>
   <!-- Simple joint -->
-  <joint name="joint_15_14.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
+  <joint name="joint_8_7.0" type="revolute">
+    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_15"/>
-    <child link="module_14.0"/>
-    <origin xyz="0 0 -0.05"/>
+    <parent link="link_8"/>
+    <child link="link_7.0"/>
+    <origin xyz="-0.2 0 0"/>
     <axis xyz="0 1 0"/>
   </joint>
-  <link name="module_14.0">
+  <link name="link_7.0">
     <collision>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </collision>
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </visual>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
-      <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
-    </inertial>
-  </link>
-  <!-- Simple joint -->
-  <joint name="joint_14.0_13.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
-    <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_14.0"/>
-    <child link="module_13.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="1 0 0"/>
-  </joint>
-  <link name="module_13.0">
-    <collision>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </collision>
-    <visual>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </visual>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
-      <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
-    </inertial>
-  </link>
-  <!-- Simple joint -->
-  <joint name="joint_13.0_12.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
-    <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_13.0"/>
-    <child link="module_12.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="0 1 0"/>
-  </joint>
-  <link name="module_12.0">
-    <collision>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </collision>
-    <visual>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </visual>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
-      <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
-    </inertial>
-  </link>
-  <!-- Simple joint -->
-  <joint name="joint_12.0_11.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
-    <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_12.0"/>
-    <child link="module_11.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="1 0 0"/>
-  </joint>
-  <link name="module_11.0">
-    <collision>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </collision>
-    <visual>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </visual>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
-      <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
-    </inertial>
-  </link>
-  <!-- Simple joint -->
-  <joint name="joint_11.0_10.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
-    <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_11.0"/>
-    <child link="module_10.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="0 1 0"/>
-  </joint>
-  <link name="module_10.0">
-    <collision>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </collision>
-    <visual>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </visual>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
-      <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
-    </inertial>
-  </link>
-  <!-- Simple joint -->
-  <joint name="joint_10.0_9.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
-    <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_10.0"/>
-    <child link="module_9.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="1 0 0"/>
-  </joint>
-  <link name="module_9.0">
-    <collision>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </collision>
-    <visual>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </visual>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
-      <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
-    </inertial>
-  </link>
-  <!-- Simple joint -->
-  <joint name="joint_9.0_8.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
-    <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_9.0"/>
-    <child link="module_8.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="0 1 0"/>
-  </joint>
-  <link name="module_8.0">
-    <collision>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </collision>
-    <visual>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </visual>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
-      <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
-    </inertial>
-  </link>
-  <!-- Simple joint -->
-  <joint name="joint_8.0_7.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
-    <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_8.0"/>
-    <child link="module_7.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="1 0 0"/>
-  </joint>
-  <link name="module_7.0">
-    <collision>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </collision>
-    <visual>
-      <geometry>
-        <cylinder length="0.05" radius="0.025"/>
-      </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-    </visual>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
+      <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+      <mass value="0.2"/>
       <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
     </inertial>
   </link>
   <!-- Simple joint -->
   <joint name="joint_7.0_6.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
+    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_7.0"/>
-    <child link="module_6.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="0 1 0"/>
+    <parent link="link_7.0"/>
+    <child link="link_6.0"/>
+    <origin xyz="-0.2 0 0"/>
+    <axis xyz="1 0 0"/>
   </joint>
-  <link name="module_6.0">
+  <link name="link_6.0">
     <collision>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </collision>
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </visual>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
+      <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+      <mass value="0.2"/>
       <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
     </inertial>
   </link>
   <!-- Simple joint -->
   <joint name="joint_6.0_5.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
+    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_6.0"/>
-    <child link="module_5.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="1 0 0"/>
+    <parent link="link_6.0"/>
+    <child link="link_5.0"/>
+    <origin xyz="-0.2 0 0"/>
+    <axis xyz="0 1 0"/>
   </joint>
-  <link name="module_5.0">
+  <link name="link_5.0">
     <collision>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </collision>
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </visual>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
+      <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+      <mass value="0.2"/>
       <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
     </inertial>
   </link>
   <!-- Simple joint -->
   <joint name="joint_5.0_4.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
+    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_5.0"/>
-    <child link="module_4.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="0 1 0"/>
+    <parent link="link_5.0"/>
+    <child link="link_4.0"/>
+    <origin xyz="-0.2 0 0"/>
+    <axis xyz="1 0 0"/>
   </joint>
-  <link name="module_4.0">
+  <link name="link_4.0">
     <collision>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </collision>
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </visual>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
+      <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+      <mass value="0.2"/>
       <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
     </inertial>
   </link>
   <!-- Simple joint -->
   <joint name="joint_4.0_3.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
+    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_4.0"/>
-    <child link="module_3.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="1 0 0"/>
+    <parent link="link_4.0"/>
+    <child link="link_3.0"/>
+    <origin xyz="-0.2 0 0"/>
+    <axis xyz="0 1 0"/>
   </joint>
-  <link name="module_3.0">
+  <link name="link_3.0">
     <collision>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </collision>
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </visual>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
+      <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+      <mass value="0.2"/>
       <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
     </inertial>
   </link>
   <!-- Simple joint -->
   <joint name="joint_3.0_2.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
+    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_3.0"/>
-    <child link="module_2.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="0 1 0"/>
+    <parent link="link_3.0"/>
+    <child link="link_2.0"/>
+    <origin xyz="-0.2 0 0"/>
+    <axis xyz="1 0 0"/>
   </joint>
-  <link name="module_2.0">
+  <link name="link_2.0">
     <collision>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </collision>
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </visual>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
+      <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+      <mass value="0.2"/>
       <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
     </inertial>
   </link>
   <!-- Simple joint -->
   <joint name="joint_2.0_1.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
+    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_2.0"/>
-    <child link="module_1.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="1 0 0"/>
+    <parent link="link_2.0"/>
+    <child link="link_1.0"/>
+    <origin xyz="-0.2 0 0"/>
+    <axis xyz="0 1 0"/>
   </joint>
-  <link name="module_1.0">
+  <link name="link_1.0">
     <collision>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </collision>
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </visual>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
+      <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+      <mass value="0.2"/>
       <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
     </inertial>
   </link>
   <!-- Simple joint -->
   <joint name="joint_1.0_0.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
+    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_1.0"/>
-    <child link="module_0.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="0 1 0"/>
+    <parent link="link_1.0"/>
+    <child link="link_0.0"/>
+    <origin xyz="-0.2 0 0"/>
+    <axis xyz="1 0 0"/>
   </joint>
-  <link name="module_0.0">
+  <link name="link_0.0">
     <collision>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </collision>
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </visual>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
+      <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+      <mass value="0.2"/>
       <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
     </inertial>
   </link>
   <!-- Simple joint -->
   <joint name="joint_0.0_-1.0" type="revolute">
-    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
+    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
-    <parent link="module_0.0"/>
-    <child link="module_-1.0"/>
-    <origin xyz="0 0 -0.05"/>
-    <axis xyz="1 0 0"/>
+    <parent link="link_0.0"/>
+    <child link="link_-1.0"/>
+    <origin xyz="-0.2 0 0"/>
+    <axis xyz="0 1 0"/>
   </joint>
-  <link name="module_-1.0">
+  <link name="link_-1.0">
     <collision>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </collision>
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.025"/>
+        <cylinder length="0.2" radius="0.025"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
+      <origin rpy="0 1.57075 0" xyz="-0.1 0 0"/>
     </visual>
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 -0.025"/>
-      <mass value="0.159"/>
+      <origin rpy="0 0 0" xyz="-0.1 0 0"/>
+      <mass value="0.2"/>
       <inertia ixx="0.00006" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00006"/>
     </inertial>
   </link>
