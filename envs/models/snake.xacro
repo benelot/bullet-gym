@@ -12,9 +12,9 @@
 	<xacro:property name="spring_mass" value="0.01" />
 	<xacro:property name="spring_inertia" value="0.000006" />
 	<xacro:property name="pi" value="3.1415" />
-	<xacro:property name="joint_type" value="1" /> <!-- 1=simple_joint -1=springy_joint -->
-	<xacro:property name="joint_minLimit" value="-${pi}/2" />
-	<xacro:property name="joint_maxLimit" value="${pi}/2" />
+	<xacro:property name="joint_type" value="-1" /> <!-- 1=simple_joint -1=springy_joint -->
+	<xacro:property name="joint_minLimit" value="-${pi/2}" />
+	<xacro:property name="joint_maxLimit" value="${pi/2}" />
 
 	<xacro:macro name="snake_link" params="number">
 		<link name="link_${number}">

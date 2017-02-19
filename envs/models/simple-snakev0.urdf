@@ -29,7 +29,7 @@
   </link>
   <!-- Simple joint -->
   <joint name="joint_8_7.0" type="revolute">
-    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
+    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
     <parent link="link_8"/>
     <child link="link_7.0"/>
@@ -57,7 +57,7 @@
   </link>
   <!-- Simple joint -->
   <joint name="joint_7.0_6.0" type="revolute">
-    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
+    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
     <parent link="link_7.0"/>
     <child link="link_6.0"/>
@@ -85,7 +85,7 @@
   </link>
   <!-- Simple joint -->
   <joint name="joint_6.0_5.0" type="revolute">
-    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
+    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
     <parent link="link_6.0"/>
     <child link="link_5.0"/>
@@ -113,7 +113,7 @@
   </link>
   <!-- Simple joint -->
   <joint name="joint_5.0_4.0" type="revolute">
-    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
+    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
     <parent link="link_5.0"/>
     <child link="link_4.0"/>
@@ -141,7 +141,7 @@
   </link>
   <!-- Simple joint -->
   <joint name="joint_4.0_3.0" type="revolute">
-    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
+    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
     <parent link="link_4.0"/>
     <child link="link_3.0"/>
@@ -169,7 +169,7 @@
   </link>
   <!-- Simple joint -->
   <joint name="joint_3.0_2.0" type="revolute">
-    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
+    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
     <parent link="link_3.0"/>
     <child link="link_2.0"/>
@@ -197,7 +197,7 @@
   </link>
   <!-- Simple joint -->
   <joint name="joint_2.0_1.0" type="revolute">
-    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
+    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
     <parent link="link_2.0"/>
     <child link="link_1.0"/>
@@ -225,7 +225,7 @@
   </link>
   <!-- Simple joint -->
   <joint name="joint_1.0_0.0" type="revolute">
-    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
+    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
     <parent link="link_1.0"/>
     <child link="link_0.0"/>
@@ -253,7 +253,7 @@
   </link>
   <!-- Simple joint -->
   <joint name="joint_0.0_-1.0" type="revolute">
-    <limit effort="1000.0" lower="-3.1415/2" upper="3.1415/2" velocity="10"/>
+    <limit effort="1000.0" lower="-1.57075" upper="1.57075" velocity="10"/>
     <dynamics damping="0.001" friction="0.2"/>
     <parent link="link_0.0"/>
     <child link="link_-1.0"/>
