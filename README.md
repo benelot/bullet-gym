@@ -7,15 +7,15 @@ Thanks to matpalm for a [beautiful example](https://github.com/benelot/cartpolep
 
 The following agents are available to be run with the environments:
 - Keras DQN Agent [KerasDQNAgent]
-- Keras DDQN Agent [WIP]
-- Keras DDPG Agent[WIP]
-- Keras NAF Agent [WIP]
-- Keras CEM Agent [WIP]
+- Keras DDQN Agent [KerasDDQNAgent]
+- Keras DDPG Agent[KerasDDPGAgent]
+- Keras NAF Agent [KerasNAFAgent]
+- Keras CEM Agent [KerasCEMAgent]
 
 The following environments are available to be run with the agents:
 - CartPole Environment [CartPolev0Env]
 - CartPole Environment with Detached Pole (2D control problem) [Detached2DCartPolev0Env]
-
+- Motion Environment with different morphologies [Motionv0Env]
 
 ## Dependencies
 
