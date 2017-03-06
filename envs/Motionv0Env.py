@@ -17,14 +17,14 @@ np.set_printoptions(precision=3, suppress=True, linewidth=10000)
 def add_opts(parser):
     # add some parser arguments such as the ones below
     parser.add_argument('--delay', type=float, default=0.0)
-    parser.add_argument('--action-gain', type=float, default=0.2,
+    parser.add_argument('--action-gain', type=float, default=1.25,
                       help="magnitude of action gain applied per step")
     parser.add_argument('--gravity-force', type=float, default=-9.81,
                         help="amount of gravity")
     parser.add_argument('--control-type', type=str, default='position-control',
                         help="the type of control to move the morphology (position-control, velocity-control, torque-control)")
-    parser.add_argument('--morphology-type', type=int, default=1,
-                        help="Type of morphology; 1 = snake/2 = springy snake")
+    parser.add_argument('--morphology-type', type=int, default=3,
+                        help="Type of morphology; 1 = snake/2 = springy snake/3 = phantomx")
     parser.add_argument('--action-repeats', type=int, default=2,
                       help="number of action repeats")
     parser.add_argument('--steps-per-repeat', type=int, default=5,
@@ -52,9 +52,9 @@ def state_fields_of_pv_of(body_id, vHelper, link_id=-1):
     
     return np.array([x,y,z,a,b,c,d,vx,vy,vz,va,vb,vc])
 
-def get_discrete_action_space_of(body_id): # here is the state explosion!
+def get_discrete_action_space_of(body_id):
     num_joints = p.getNumJoints(body_id)
-    return spaces.Discrete(3^num_joints)
+    return spaces.Discrete(3^num_joints) # here is the state explosion!
 
 def get_continuous_action_space_of(body_id): # the continuous version avoids the state explosion!
     num_joints = p.getNumJoints(body_id)
@@ -69,7 +69,7 @@ class Motionv0Env(gym.Env):
         
         self.metadata = {
             'discrete_actions' : True,
-            'continuous_actions': True,
+            'continuous_actions' : True,
             'render.modes': ['human', 'rgb_array'],
             'video.frames_per_second' : int(np.round(1.0 / 25.0))
         }
@@ -79,9 +79,7 @@ class Motionv0Env(gym.Env):
         # gain to apply per action simulation step.
         # in the discrete case this is the fixed gain applied
         # in the continuous case each x/y is in range (-G, G)
-        self.action_gain = opts.action_gain
-        
-        self.action_force = 1 # Newton
+        self.action_gain = opts.action_gain # Newton
         
         # how many time to repeat each action per step().
         # and how many sim steps to do per state capture
@@ -102,6 +100,10 @@ class Motionv0Env(gym.Env):
             self.body = p.loadURDF("envs/models/simple-snakev0.urdf",0,0,2, 0,0,0,1)
         elif opts.morphology_type == 2:
             self.body = p.loadURDF("envs/models/springy-snakev0.urdf",0,0,2, 0,0,0,1)
+        elif opts.morphology_type == 3:
+            self.body = p.loadURDF("envs/models/phantomx/phantomx.urdf",0,0,2, 0,0,0,1)
+            
+        self.initPosition, self.initOrientation = p.getBasePositionAndOrientation(self.body)
             
         self.num_joints = p.getNumJoints(self.body)
         
@@ -156,44 +158,51 @@ class Motionv0Env(gym.Env):
     # calculate the reward for your agent
  
         info = {}
- 
-#       based on action decide the actions for each joint
-        joint_actions = np.zeros(self.num_joints)
-        if self.discrete_actions:
-            for joint in xrange(self.num_joints): # finds out the action to apply for each joint
-                if(action == 0):
-                    break
-                action_sign = np.mod(action,3) - 1
-                action = np.floor_divide(action, 3)
-                joint_actions[joint] = action_sign * self.action_gain
-        else: # continuous actions
-            joint_actions = action * 2 * np.pi - np.pi#self.action_gain
-
-        # step simulation forward. at the end of each repeat we set part of the step's
-        # state by capture the cart & pole state in some form.
-        for r in xrange(self.repeats):
-            for _ in xrange(self.steps_per_repeat):
-                p.stepSimulation()
-                for joint in xrange(self.num_joints):
-                    p.setJointMotorControl2(self.body,joint,p.POSITION_CONTROL, targetPosition = joint_actions[joint], force = self.action_force)
-                if self.delay > 0:
-                    time.sleep(self.delay)
-            self.set_state_element_for_repeat(r)
-        self.steps += 1
-
-#         # Check for out of bounds
-#         # we (re)fetch pose explicitly rather than depending on fields in state.
-#         (x, y, _z), orient,_,_,_,_ = p.getLinkState(self.cartpole, 0)
-#         ox, oy, _oz = p.getEulerFromQuaternion(orient)  # roll / pitch / yaw
-
-        # check for end of episode (by length)
-        if self.steps >= self.max_episode_len:
-            info['done_reason'] = 'episode length'
+         
+        # check if action is NaN
+        if np.isnan(action).any():
+            info['done_reason'] = 'action is NaN'
+            reward = 0
             self.done = True
-
-        # calc reward
-        reward = self.reward.getReward()
-
+        else:
+            # based on action decide the actions for each joint
+            joint_actions = np.zeros(self.num_joints)
+            if self.discrete_actions:
+                for joint in xrange(self.num_joints): # finds out the action to apply for each joint
+                    if(action == 0):
+                        break
+                    action_sign = np.mod(action,3) - 1
+                    action = np.floor_divide(action, 3)
+                    joint_actions[joint] = action_sign * self.action_gain
+            else: # continuous actions
+                joint_actions = action * 2 * np.pi - np.pi # self.action_gain
+      
+            # step simulation forward. at the end of each repeat we set part of the step's
+            # state by capture the cart & pole state in some form.
+            for r in xrange(self.repeats):
+                for _ in xrange(self.steps_per_repeat):
+                    p.stepSimulation()
+                    for joint in xrange(self.num_joints):
+                        p.setJointMotorControl2(self.body,joint,p.POSITION_CONTROL, targetPosition = joint_actions[joint], force = self.action_gain)
+                    if self.delay > 0:
+                        time.sleep(self.delay)
+                self.set_state_element_for_repeat(r)
+            self.steps += 1
+     
+            # check for end of episode (by length)
+            if self.steps >= self.max_episode_len:
+                info['done_reason'] = 'episode length'
+                self.done = True
+ 
+            # calc reward
+            reward = self.reward.getReward()
+        
+        # check if reward is NaN
+        if np.isnan(reward):
+            info['done_reason'] = 'reward is NaN'
+            reward = 0
+            self.done = True
+ 
         # return observation
         return np.copy(self.state), reward, self.done, info
         
@@ -211,7 +220,7 @@ class Motionv0Env(gym.Env):
         self.done = False
 
         # reset morphology
-        p.resetBasePositionAndOrientation(self.body, (0,0,2), (0,0,0,1)) # reset body position and orientation
+        p.resetBasePositionAndOrientation(self.body, self.initPosition, self.initOrientation) # reset body position and orientation
         
         resetPosition = 0
         if self.random_initial_position:

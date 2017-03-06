@@ -137,63 +137,75 @@ class Detached2DCartPolev0Env(gym.Env):
 
 		info = {}
 
-		# based on action decide the x and y forces
-		fx = fy = 0
-		if self.discrete_actions:
-			if action == 0:
-				pass
-			elif action == 1:
-				fx = self.action_force
-			elif action == 2:
-				fx = -self.action_force
-			elif action == 3:
-				fy = self.action_force
-			elif action == 4:
-				fy = -self.action_force
-			else:
-				raise Exception("unknown discrete action [%s]" % action)
-		else: # continuous actions
-			fx, fy = action * self.action_force
-
-		# step simulation forward. at the end of each repeat we set part of the step's
-		# state by capture the cart & pole state in some form.
-		for r in xrange(self.repeats):
-			for _ in xrange(self.steps_per_repeat):
-				p.stepSimulation()
-				p.applyExternalForce(self.cart, -1, (fx,fy,0), (0,0,0), p.WORLD_FRAME)
-				if self.delay > 0:
-					time.sleep(self.delay)
-			self.set_state_element_for_repeat(r)
-		self.steps += 1
-
-		# Check for out of bounds by position or orientation on pole.
-		# we (re)fetch pose explicitly rather than depending on fields in state.
-		(x, y, _z), orient = p.getBasePositionAndOrientation(self.pole)
-		(cx, cy, cz), corient = p.getBasePositionAndOrientation(self.cart)
-		ox, oy, _oz = p.getEulerFromQuaternion(orient)  # roll / pitch / yaw
-		if abs(x) > self.pos_threshold or abs(y) > self.pos_threshold or abs(cx) > self.pos_threshold or abs(cy) > self.pos_threshold: # cart and pole can not escape a certain box
-			info['done_reason'] = 'out of position bounds'
+		# check if action is NaN
+		if np.isnan(action).any():
+			info['done_reason'] = 'action is NaN'
+			reward = 0
 			self.done = True
-			reward = 0.0
-		elif abs(ox) > self.angle_threshold or abs(oy) > self.angle_threshold:
-			# TODO: probably better to do explicit angle from z?
-			info['done_reason'] = 'out of orientation bounds'
+		else:
+			# based on action decide the x and y forces
+			fx = fy = 0
+			if self.discrete_actions:
+				if action == 0:
+					pass
+				elif action == 1:
+					fx = self.action_force
+				elif action == 2:
+					fx = -self.action_force
+				elif action == 3:
+					fy = self.action_force
+				elif action == 4:
+					fy = -self.action_force
+				else:
+					raise Exception("unknown discrete action [%s]" % action)
+			else: # continuous actions
+				fx, fy = action * self.action_force
+	
+			# step simulation forward. at the end of each repeat we set part of the step's
+			# state by capture the cart & pole state in some form.
+			for r in xrange(self.repeats):
+				for _ in xrange(self.steps_per_repeat):
+					p.stepSimulation()
+					p.applyExternalForce(self.cart, -1, (fx,fy,0), (0,0,0), p.WORLD_FRAME)
+					if self.delay > 0:
+						time.sleep(self.delay)
+				self.set_state_element_for_repeat(r)
+			self.steps += 1
+	
+			# Check for out of bounds by position or orientation on pole.
+			# we (re)fetch pose explicitly rather than depending on fields in state.
+			(x, y, _z), orient = p.getBasePositionAndOrientation(self.pole)
+			(cx, cy, cz), corient = p.getBasePositionAndOrientation(self.cart)
+			ox, oy, _oz = p.getEulerFromQuaternion(orient)  # roll / pitch / yaw
+			if abs(x) > self.pos_threshold or abs(y) > self.pos_threshold or abs(cx) > self.pos_threshold or abs(cy) > self.pos_threshold: # cart and pole can not escape a certain box
+				info['done_reason'] = 'out of position bounds'
+				self.done = True
+				reward = 0.0
+			elif abs(ox) > self.angle_threshold or abs(oy) > self.angle_threshold:
+				# TODO: probably better to do explicit angle from z?
+				info['done_reason'] = 'out of orientation bounds'
+				self.done = True
+				reward = 0.0
+			# check for end of episode (by length)
+			if self.steps >= self.max_episode_len:
+				info['done_reason'] = 'episode length'
+				self.done = True
+	
+			# calc reward, fixed base of 1.0
+			reward = 1.0
+			if self.reward_calc == "angle" or self.reward_calc == "angle_action":
+				# clip to zero since angles can be past threshold
+				reward += max(0, 2 * self.angle_threshold - np.abs(ox) - np.abs(oy))
+			if self.reward_calc == "action" or self.reward_calc == "angle_action":
+				# max norm will be sqr(2) ~= 1.4.
+				# reward is already 1.0 to add another 0.5 as o0.1 buffer from zero
+				reward += 0.5 - np.linalg.norm(action[0])
+				
+		# check if reward is NaN
+		if np.isnan(reward):
+			info['done_reason'] = 'reward is NaN'
+			reward = 0
 			self.done = True
-			reward = 0.0
-		# check for end of episode (by length)
-		if self.steps >= self.max_episode_len:
-			info['done_reason'] = 'episode length'
-			self.done = True
-
-		# calc reward, fixed base of 1.0
-		reward = 1.0
-		if self.reward_calc == "angle" or self.reward_calc == "angle_action":
-			# clip to zero since angles can be past threshold
-			reward += max(0, 2 * self.angle_threshold - np.abs(ox) - np.abs(oy))
-		if self.reward_calc == "action" or self.reward_calc == "angle_action":
-			# max norm will be sqr(2) ~= 1.4.
-			# reward is already 1.0 to add another 0.5 as o0.1 buffer from zero
-			reward += 0.5 - np.linalg.norm(action[0])
 
 		# return observation
 		return np.copy(self.state), reward, self.done, info

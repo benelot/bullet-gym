@@ -15,6 +15,7 @@ class RewardFunction():
     VelocityReward = 0
     PositionReward = 1
     
+    # primes to make it easy to configure multiple axes and check by modulo
     XAxis = 2
     YAxis = 3
     ZAxis = 5
