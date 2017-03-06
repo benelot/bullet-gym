@@ -43,8 +43,9 @@ class Trainer:
 		env = 0 # just to mute the ide
 		exec "env = %s.%s(opts)" % (opts.env, opts.env)
 		
-		if agent.metadata['discrete_actions'] != env.metadata['discrete_actions']:
+		if agent.metadata['discrete_actions'] == True and agent.metadata['discrete_actions'] != env.metadata['discrete_actions'] or agent.metadata['discrete_actions'] == False and agent.metadata['discrete_actions'] == env.metadata['continuous_actions']:
 			print "Incompatible agent/environment pair!"
+			exit()
 		
 		# configurations
 		env.seed(int(time.time()))
