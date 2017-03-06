@@ -33,14 +33,14 @@
     <inertial>
       <origin xyz="0 0 0"/>
       <mass value="0.97559947"/>
-      <inertia ixx="3.1081800" ixy="-0.25460189" ixz="2.0318174" iyy="6.3787776" iyz="0.16417863" izz="5.3316425"/>
+      <inertia ixx="3.1081800" ixy="0" ixz="0" iyy="5.3787776" iyz="0" izz="3.3316425"/>
     </inertial>
     <visual>
       <!--origin xyz="-0.0235 0 -0.03525" rpy="0 0 0" / -->
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.102 0.109 0.106" / -->
-        <mesh filename="meshes/body.STL" scale="1 1 1"/>
+        <mesh filename="meshes/body_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Red"/>
     </visual>
@@ -55,13 +55,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -76,13 +76,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -97,13 +97,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/thigh_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/thigh_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="DarkGreen"/>
     </visual>
@@ -118,13 +118,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/tibia_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/tibia_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Blue"/>
     </visual>
@@ -165,13 +165,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -186,13 +186,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -207,13 +207,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/thigh_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/thigh_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="DarkGreen"/>
     </visual>
@@ -228,13 +228,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/tibia_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/tibia_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Blue"/>
     </visual>
@@ -275,13 +275,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -296,13 +296,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -317,13 +317,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/thigh_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/thigh_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="DarkGreen"/>
     </visual>
@@ -338,13 +338,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/tibia_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/tibia_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Blue"/>
     </visual>
@@ -385,13 +385,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -406,13 +406,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -427,13 +427,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/thigh_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/thigh_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="DarkGreen"/>
     </visual>
@@ -448,13 +448,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/tibia_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/tibia_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Blue"/>
     </visual>
@@ -495,13 +495,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -516,13 +516,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -537,13 +537,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/thigh_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/thigh_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="DarkGreen"/>
     </visual>
@@ -558,13 +558,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/tibia_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/tibia_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Blue"/>
     </visual>
@@ -605,13 +605,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -626,13 +626,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 -0.02633 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 -0.0252 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/connect.STL" scale="1 1 1"/>
+        <mesh filename="meshes/connect_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Yellow"/>
     </visual>
@@ -647,13 +647,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/thigh_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/thigh_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="DarkGreen"/>
     </visual>
@@ -668,13 +668,13 @@
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.024357719"/>
-      <inertia ixx="0.0051411124" ixy="-0.00057530255" ixz="-0.000024729049" iyy="0.0081915737" iyz="-0.000019223094" izz="0.0041379812"/>
+      <inertia ixx="0.0051411124" ixy="0" ixz="0" iyy="0.0081915737" iyz="0" izz="0.0041379812"/>
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <!--box size="0.045 0.022 0.0325" / -->
-        <mesh filename="meshes/tibia_l.STL" scale="1 1 1"/>
+        <mesh filename="meshes/tibia_l_low.STL" scale="1 1 1"/>
       </geometry>
       <material name="Blue"/>
     </visual>
