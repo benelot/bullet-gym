@@ -17,7 +17,9 @@ np.set_printoptions(precision=3, suppress=True, linewidth=10000)
 def add_opts(parser):
     # add some parser arguments such as the ones below
     parser.add_argument('--delay', type=float, default=0.0)
-    parser.add_argument('--action-gain', type=float, default=1.25,
+    parser.add_argument('--action-gain', type=float, default=-1,
+                      help="magnitude of action gain applied per step")
+    parser.add_argument('--action-force', type=float, default=1.25,
                       help="magnitude of action gain applied per step")
     parser.add_argument('--gravity-force', type=float, default=-9.81,
                         help="amount of gravity")
@@ -75,11 +77,14 @@ class Motionv0Env(gym.Env):
         }
         
         # do some parameter setting from your parser arguments and add other configurations
+        
+        self.control_type = opts.control_type
           
-        # gain to apply per action simulation step.
+        # force to apply per action simulation step.
         # in the discrete case this is the fixed gain applied
         # in the continuous case each x/y is in range (-G, G)
-        self.action_gain = opts.action_gain # Newton
+        self.action_gain = opts.action_gain # scale of control (position, velocity)
+        self.action_force = opts.action_force # Newton
         
         # how many time to repeat each action per step().
         # and how many sim steps to do per state capture
@@ -121,7 +126,6 @@ class Motionv0Env(gym.Env):
         # no state until reset.
         self.state = np.empty(self.state_shape, dtype=np.float32)
         
-        
     def configureActions(self, discrete_actions):
         
         # if it is possible to switch actions, do this here
@@ -138,6 +142,27 @@ class Motionv0Env(gym.Env):
         # Our observations can be within this box
         float_max = np.finfo(np.float32).max
         self.observation_space = gym.spaces.Box(-float_max, float_max, self.state_shape)
+        
+        if self.discrete_actions:
+            if self.control_type == "position-control":
+                if self.action_gain == -1:
+                    self.action_gain = 0.5 * np.pi
+            elif self.control_type == "velocity-control":
+                if self.action_gain == -1:
+                    self.action_gain = 1;
+            elif self.control_type == "torque-control":
+                if self.action_gain == -1:
+                    self.action_gain = 1.5; # torque control is even weirder
+        else:
+            if self.control_type == "position-control":
+                if self.action_gain == -1:
+                    self.action_gain = np.pi
+            elif self.control_type == "velocity-control":
+                if self.action_gain == -1:
+                    self.action_gain = 1;
+            elif self.control_type == "torque-control":
+                if self.action_gain == -1:
+                    self.action_gain = 0; # torque control is weird
         
         
     def _configure(self, display=None):
@@ -166,24 +191,34 @@ class Motionv0Env(gym.Env):
             self.done = True
         else:
             # based on action decide the actions for each joint
-            joint_actions = np.zeros(self.num_joints)
-            if self.discrete_actions:
+            joint_actions = -np.ones(self.num_joints)
+            if self.discrete_actions: # the actions come out of one number encoding the actions to apply
+                # example: (state explosion 3^2)
+                # action 0 => (-1,-1) # action 1 => ( 0,-1) # action 2 => ( 1,-1)
+                # action 3 => (-1, 0) # action 4 => ( 0, 0) # action 5 => ( 1, 0)
+                # action 6 => (-1, 1) # action 7 => ( 0, 1) # action 8 => ( 1, 1)
                 for joint in xrange(self.num_joints): # finds out the action to apply for each joint
                     if(action == 0):
                         break
                     action_sign = np.mod(action,3) - 1
                     action = np.floor_divide(action, 3)
-                    joint_actions[joint] = action_sign * self.action_gain
+            
+                    joint_actions[joint] = action_sign * action * self.action_gain
             else: # continuous actions
-                joint_actions = action * 2 * np.pi - np.pi # self.action_gain
+                joint_actions = action * self.action_gain
       
             # step simulation forward. at the end of each repeat we set part of the step's
-            # state by capture the cart & pole state in some form.
+            # state by capturing the cart & pole state in some form.
             for r in xrange(self.repeats):
                 for _ in xrange(self.steps_per_repeat):
                     p.stepSimulation()
                     for joint in xrange(self.num_joints):
-                        p.setJointMotorControl2(self.body,joint,p.POSITION_CONTROL, targetPosition = joint_actions[joint], force = self.action_gain)
+                        if self.control_type == "position-control":
+                            p.setJointMotorControl2(self.body,joint,p.POSITION_CONTROL, targetPosition = joint_actions[joint], force = self.action_force)
+                        elif self.control_type == "velocity-control":
+                            p.setJointMotorControl2(self.body,joint,p.VELOCITY_CONTROL, targetVelocity = joint_actions[joint], force = self.action_force)
+                        elif self.control_type == "torque-control":
+                            p.setJointMotorControl2(self.body,joint,p.TORQUE_CONTROL, force = joint_actions[joint])
                     if self.delay > 0:
                         time.sleep(self.delay)
                 self.set_state_element_for_repeat(r)
@@ -222,13 +257,11 @@ class Motionv0Env(gym.Env):
         # reset morphology
         p.resetBasePositionAndOrientation(self.body, self.initPosition, self.initOrientation) # reset body position and orientation
         
-        resetPosition = 0
-        if self.random_initial_position:
-            resetPosition = np.random.random() * 2 * np.pi - np.pi
-        
+        resetPosition = 0      
         for joint in xrange(self.num_joints):
+            if self.random_initial_position:  
+                resetPosition = np.random.random() * 2 * np.pi - np.pi
             p.resetJointState(self.body, joint, resetPosition) # reset joint position of joints
-            #p.setJointMotorControl2(self.body, joint, controlMode=p.POSITION_CONTROL, force=0) # release all joints controllers
         for _ in xrange(100): p.stepSimulation()
 
         # bootstrap state by running for all repeats
