@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-# Environment to learn to use a certain morphology to succed within a certain reward function
-# Rewards can be based on the achieved speed of the morphology, the height of jumping etc.
+# A robot morphology (currently a snake and a phantomx robot morphology) is set out to learn locomotion patterns to perform according to the reward function. The reward 
+# function can be something like moving along or reaching a certain speed in the direction of a certain axis. The morphologies can be controlled using position,velocity or 
+# torque control. The environment must be diversified into multiple environments, maybe one for each morphology.
 
 import gym
 from gym import spaces
