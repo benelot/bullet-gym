@@ -7,9 +7,9 @@ Thanks to matpalm for a [beautiful example](https://github.com/benelot/cartpolep
 ## Repository Contents
 
 The following environments are available to be run with the agents:
-- CartPole Environment [CartPolev0Env]
-- CartPole Environment with Detached Pole (2D control problem) [Detached2DCartPolev0Env]
-- Motion Environment with different morphologies [Motionv0Env]
+- CartPole Environment [[CartPolev0Env](https://github.com/benelot/bullet-gym/blob/master/envs/CartPolev0Env.py)]
+- CartPole Environment with Detached Pole (2D control problem) [[Detached2DCartPolev0Env](https://github.com/benelot/bullet-gym/blob/master/envs/Detached2DCartPolev0Env.py)]
+- Motion Environment with different morphologies [[Motionv0Env](https://github.com/benelot/bullet-gym/blob/master/envs/Motionv0Env.py)]
 
 More environments are about to come:
 - Inverted Double Pendulum [[InvertedDoublePendulum-v1](https://gym.openai.com/envs/InvertedDoublePendulum-v1)]
@@ -23,11 +23,11 @@ More environments are about to come:
 - Humanoid Standup [[HumanoidStandup-v1](https://gym.openai.com/envs/HumanoidStandup-v1)]
 
 The following agents are available to be run with the environments:
-- Keras DQN Agent [KerasDQNAgent]
-- Keras DDQN Agent [KerasDDQNAgent]
-- Keras DDPG Agent[KerasDDPGAgent]
-- Keras NAF Agent [KerasNAFAgent]
-- Keras CEM Agent [KerasCEMAgent]
+- Keras DQN Agent [[KerasDQNAgent](https://github.com/benelot/bullet-gym/blob/master/agents/KerasDQNAgent.py)]
+- Keras DDQN Agent [[KerasDDQNAgent](https://github.com/benelot/bullet-gym/blob/master/agents/KerasDDQNAgent.py)]
+- Keras DDPG Agent [[KerasDDPGAgent](https://github.com/benelot/bullet-gym/blob/master/agents/KerasDDPGAgent.py)]
+- Keras NAF Agent [[KerasNAFAgent](https://github.com/benelot/bullet-gym/blob/master/agents/KerasNAFAgent.py)]
+- Keras CEM Agent [[KerasCEMAgent](https://github.com/benelot/bullet-gym/blob/master/agents/KerasCEMAgent.py)]
 
 ## Dependencies
 
@@ -48,19 +48,19 @@ Currently available are the following scripts:
 
 #### CartPole Example
 A pole is attached by an un-actuated joint to a cart, which moves along a frictionless track. The system is controlled by applying a force of +action_force or -action_force to the cart. The pendulum starts upright and gets a small, initial hit, and the goal is to prevent it from falling over. 
+- showKerasDQNCartPoleExample.sh
 - showKerasDDQNCartPoleExample.sh 
 - showKerasDDPGCartPoleExample.sh
 - showKerasNAFCartPoleExample.sh [checkpoint missing]
-- showKerasDQNCartPoleExample.sh
 - showKerasCEMCartPoleExample.sh [checkpoint missing]
 
 #### Detached CartPole Example
 A pole is standing unattached on top of a cart, which moves along a frictionless track. The system is controlled by applying a force of +action_force or -action_force to the cart. The pendulum starts upright and gets a small, initial hit, and the goal is to prevent it from falling over.
+- showKerasDQNDetached2DCartPoleExample.sh
 - showKerasDDQNDetached2DCartPoleExample.sh
 - showKerasNAFDetached2DCartPoleExample.sh
 - showKerasDDPGDetached2DCartPoleExample.sh [checkpoint missing]
 - showKerasCEMDetached2DCartPoleExample.sh [checkpoint missing]
-- showKerasDQNDetached2DCartPoleExample.sh
 
 #### Motion Example
 A robot morphology (currently a snake and a phantomx robot morphology) is set out to learn locomotion patterns to perform according to the reward function. The reward function can be something like moving along or reaching a certain speed in the direction of a certain axis. The morphologies can be controlled using position,velocity or torque control. The environment must be diversified into multiple environments, maybe one for each morphology.
