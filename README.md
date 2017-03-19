@@ -12,15 +12,15 @@ The following environments are available to be run with the agents:
 - Motion Environment with different morphologies [Motionv0Env]
 
 More environments are about to come:
-- Inverted Double Pendulum [InvertedDoublePendulum-v1](https://gym.openai.com/envs/InvertedDoublePendulum-v1)
-- Reacher [Reacher-v1](https://gym.openai.com/envs/Reacher-v1)
-- Half Cheetah [HalfCheetah-v1](https://gym.openai.com/envs/HalfCheetah-v1)
-- Swimmer [Swimmer-v1](https://gym.openai.com/envs/Swimmer-v1)
-- Hopper [Hopper-v1](https://gym.openai.com/envs/Hopper-v1)
-- Walker 2D [Walker-2d-v1](https://gym.openai.com/envs/Walker2d-v1)
-- Ant [Ant-v1](https://gym.openai.com/envs/Ant-v1)
-- Humanoid [Humanoid-v1](https://gym.openai.com/envs/Humanoid-v1)
-- Humanoid Standup [HumanoidStandup-v1](https://gym.openai.com/envs/HumanoidStandup-v1)
+- Inverted Double Pendulum [[InvertedDoublePendulum-v1](https://gym.openai.com/envs/InvertedDoublePendulum-v1)]
+- Reacher [[Reacher-v1](https://gym.openai.com/envs/Reacher-v1)]
+- Half Cheetah [[HalfCheetah-v1](https://gym.openai.com/envs/HalfCheetah-v1)]
+- Swimmer [[Swimmer-v1](https://gym.openai.com/envs/Swimmer-v1)]
+- Hopper [[Hopper-v1](https://gym.openai.com/envs/Hopper-v1)]
+- Walker 2D [[Walker-2d-v1](https://gym.openai.com/envs/Walker2d-v1)]
+- Ant [[Ant-v1](https://gym.openai.com/envs/Ant-v1)]
+- Humanoid [[Humanoid-v1](https://gym.openai.com/envs/Humanoid-v1)]
+- Humanoid Standup [[HumanoidStandup-v1](https://gym.openai.com/envs/HumanoidStandup-v1)]
 
 The following agents are available to be run with the environments:
 - Keras DQN Agent [KerasDQNAgent]
