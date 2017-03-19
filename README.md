@@ -40,7 +40,7 @@ The following agents are available to be run with the environments:
 
 ## Quick-start
 
-Some examples running out of the box can be found at the root of this repository. The show*.sh scripts run an agent-environment combination with a pretrained agent showing its performance on the environment.
+Some examples running out of the box can be found at the root of this repository. The show*.sh scripts run an agent-environment combination with a pretrained agent showing its performance on the environment. To train an agent from scratch, the train*.sh scripts can be run. They run the agent-environment combination in training-mode. Removing the --gui flag in the scripts turns off the GUI output and makes the training headless.
 
 Currently available are the following scripts:
 
@@ -48,48 +48,22 @@ Currently available are the following scripts:
 
 #### CartPole Example
 A pole is attached by an un-actuated joint to a cart, which moves along a frictionless track. The system is controlled by applying a force of +action_force or -action_force to the cart. The pendulum starts upright and gets a small, initial hit, and the goal is to prevent it from falling over. 
-- showKerasDQNCartPoleExample.sh
-- showKerasDDQNCartPoleExample.sh 
-- showKerasDDPGCartPoleExample.sh
-- showKerasNAFCartPoleExample.sh [checkpoint missing]
-- showKerasCEMCartPoleExample.sh [checkpoint missing]
+- [showKerasDQNCartPoleExample.sh][trainKerasDQNCartPoleExample.sh]
+- [showKerasDDQNCartPoleExample.sh][trainKerasDDQNCartPoleExample.sh]
+- [showKerasDDPGCartPoleExample.sh][trainKerasDDPGCartPoleExample.sh]
+- [showKerasNAFCartPoleExample.sh (checkpoint missing)][trainKerasNAFCartPoleExample.sh]
+- [showKerasCEMCartPoleExample.sh (checkpoint missing)][trainKerasCEMCartPoleExample.sh]
 
 #### Detached CartPole Example
 A pole is standing unattached on top of a cart, which moves along a frictionless track. The system is controlled by applying a force of +action_force or -action_force to the cart. The pendulum starts upright and gets a small, initial hit, and the goal is to prevent it from falling over.
-- showKerasDQNDetached2DCartPoleExample.sh
-- showKerasDDQNDetached2DCartPoleExample.sh
-- showKerasNAFDetached2DCartPoleExample.sh
-- showKerasDDPGDetached2DCartPoleExample.sh [checkpoint missing]
-- showKerasCEMDetached2DCartPoleExample.sh [checkpoint missing]
+- [showKerasDQNDetached2DCartPoleExample.sh][trainKerasDQNDetached2DCartpoleExample.sh]
+- [showKerasDDQNDetached2DCartPoleExample.sh][trainKerasDDQNDetached2DCartPoleExample.sh]
+- [showKerasNAFDetached2DCartPoleExample.sh][trainKerasNAFDetached2DCartPoleExample.sh]
+- [showKerasDDPGDetached2DCartPoleExample.sh (checkpoint missing)][trainKerasDDPGDetached2DCartPoleExample.sh]
+- [showKerasCEMDetached2DCartPoleExample.sh (checkpoint missing)][trainKerasCEMDetached2DCartPoleExample.sh]
 
 #### Motion Example
 A robot morphology (currently a snake and a phantomx robot morphology) is set out to learn locomotion patterns to perform according to the reward function. The reward function can be something like moving along or reaching a certain speed in the direction of a certain axis. The morphologies can be controlled using position,velocity or torque control. The environment must be diversified into multiple environments, maybe one for each morphology.
-- showKerasDDPGMotionExample.sh [checkpoint missing]
-- showKerasNAFMotionExample.sh [checkpoint missing]
+- [showKerasDDPGMotionExample.sh (checkpoint missing)][trainKerasDDPGMotionExample.sh]
+- [showKerasNAFMotionExample.sh (checkpoint missing)][trainKerasNAFMotionExample.sh]
 
-To train an agent from scratch, the train*.sh scripts can be run. They run the agent-environment combination in training-mode. Removing the --gui flag in the scripts turns off the GUI output and makes the training headless.
-
-Currently available are the following scripts:
-
-### Environments
-
-#### CartPole Example
-A pole is attached by an un-actuated joint to a cart, which moves along a frictionless track. The system is controlled by applying a force of +action_force or -action_force to the cart. The pendulum starts upright and gets a small, initial hit, and the goal is to prevent it from falling over. 
-- trainKerasDQNCartPoleExample.sh
-- trainKerasCEMCartPoleExample.sh
-- trainKerasDDPGCartPoleExample.sh
-- trainKerasDDQNCartPoleExample.sh
-- trainKerasDQNCartPoleExample.sh
-- trainKerasNAFCartPoleExample.sh
-
-#### Detached CartPole Example
-A pole is standing unattached on top of a cart, which moves along a frictionless track. The system is controlled by applying a force of +action_force or -action_force to the cart. The pendulum starts upright and gets a small, initial hit, and the goal is to prevent it from falling over.
-- trainKerasDQNDetached2DCartpoleExample.sh
-- trainKerasCEMDetached2DCartPoleExample.sh
-- trainKerasDDPGDetached2DCartPoleExample.sh
-- trainKerasNAFDetached2DCartPoleExample.sh
-- trainKerasDDQNDetached2DCartPoleExample.sh
-
-#### Motion Example
-- trainKerasDDPGMotionExample.sh
-- trainKerasNAFMotionExample.sh
