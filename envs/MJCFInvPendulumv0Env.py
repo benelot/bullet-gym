@@ -89,27 +89,9 @@ class MJCFInvPendulumv0Env(PybulletMujocoEnv):
         }
         
     def configureActions(self, discrete_actions):
-        pass
-        # if it is possible to switch actions, do this here
-        
-        # true if action space is discrete
-        # false if action space is continuous
-#         self.discrete_actions = discrete_actions
-        
-#         if self.discrete_actions:
-#             self.action_space = spaces.Discrete(3)
-#         else:
-#             self.action_space = spaces.Box(-1.0, 1.0, shape=(1, 1))
-        
-#         # Our observations can be within this box
-#         float_max = np.finfo(np.float32).max
-#         self.observation_space = gym.spaces.Box(-float_max, float_max, self.state_shape)
-        
+        pass        
         
     def _configure(self, display=None):
-        pass
-
-    def _seed(self, seed=None):
         pass
 
     def _render(self, mode='human', close=False):

@@ -5,7 +5,7 @@ Created on Apr 4, 2017
 '''
 
 import gym
-from gym import spaces
+import gym, gym.spaces, gym.utils, gym.utils.seeding
 import numpy as np
 import pybullet as p
 
@@ -31,7 +31,7 @@ class PybulletMujocoEnv(gym.Env):
         self.frame_skip = frame_skip
         self.timestep = timestep
         self.model_xml = model_xml
-        self.bodies, self.joints, = self.getScene(p.loadMJCF(model_xml))
+        self.parts, self.joints, = self.getScene(p.loadMJCF(model_xml))
         self.robot_name = robot_name
         self.dt = timestep * frame_skip
         self.metadata = {
@@ -50,7 +50,7 @@ class PybulletMujocoEnv(gym.Env):
                 joints[joint_name].disable_motor()
                 
                 parts[part_name] = BodyPart(bodies,i)
-        return bodies, joints
+        return parts, joints
 
     def _seed(self, seed=None):
         self.np_random, seed = gym.utils.seeding.np_random(seed)
@@ -63,8 +63,14 @@ class BodyPart:
         self.bodies = bodies
         self.bodyIndex = bodyIndex
     
-    def get_state(self):
+    def get_pose(self):
         return state_fields_of_pose_of(self.bodies[self.bodyIndex])
+    
+    def current_position(self):
+        return self.get_pose()[:3];
+    
+    def current_orientation(self):
+        return self.get_pose()[4:];
     
 class Joint:
     def __init__(self, bodies, bodyIndex, jointIndex):
@@ -87,6 +93,9 @@ class Joint:
     
     def set_torque(self, torque):
         p.setJointMotorControl2(self.bodies[self.bodyIndex],self.jointIndex,p.TORQUE_CONTROL, force=torque)
-        
+    
+    def reset_position(self, position):
+        self.set_position(position)
+        self.disable_motor()
     def disable_motor(self):
         p.setJointMotorControl2(self.bodies[self.bodyIndex],self.jointIndex,controlMode=p.VELOCITY_CONTROL, force=0)
