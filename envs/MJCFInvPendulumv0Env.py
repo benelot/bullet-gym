@@ -16,8 +16,6 @@ def add_opts(parser):
     pass
     # add some parser arguments such as the ones below
     parser.add_argument('--delay', type=float, default=0.0)
-#     parser.add_argument('--action-force', type=float, default=50.0,
-#                       help="magnitude of action force applied per step")
     parser.add_argument('--initial-force', type=float, default=55.0,
                       help="magnitude of initial push, in random direction")
     parser.add_argument('--no-random-theta', action='store_true')
@@ -190,7 +188,7 @@ class MJCFInvPendulumv0Env(PybulletMujocoEnv):
  
         # reset pole on cart in starting poses
         self.slider.set_state(0, 0) # reset joint position of cart
-        self.polejoint.set_state(0 if not self.swingup else 3.1415,0) # reset joint position of pole
+        self.polejoint.set_state(0 if not self.swingup else np.pi,0) # reset joint position of pole
         for _ in xrange(100): p.stepSimulation()
  
         # give a fixed force push in a random direction to get things going...

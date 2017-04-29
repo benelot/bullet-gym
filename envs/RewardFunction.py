@@ -37,7 +37,7 @@ class RewardFunction():
         if(self.rewardType == self.VelocityReward):
             return self.getVelocityReward()
         
-        if(self.rewardType == self.PosititionReward):
+        if(self.rewardType == self.PositionReward):
             return self.getPositionReward()
 
     def getVelocityReward(self):
@@ -65,7 +65,7 @@ class RewardFunction():
         avgLinkPosition = 0
  
         for link_id in range(-1,self.linkQty):
-            (x, y, z),_,_,_,_,_ = state_fields_of_pose_of(self.body_id, link_id)
+            (x, y, z),orient = state_fields_of_pose_of(self.body_id, link_id)
             
             sqLength = 0
             if self.config % self.XAxis == 0:

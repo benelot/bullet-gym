@@ -9,6 +9,13 @@ from gym import spaces
 import numpy as np
 import pybullet as p
 
+def state_fields_of_pose_of(body_id, link_id=-1): # a method you will most probably need a lot to get pose and orientation
+    if link_id == -1:
+        (x,y,z), (a,b,c,d) = p.getBasePositionAndOrientation(body_id)
+    else:
+        (x,y,z), (a,b,c,d),_,_,_,_ = p.getLinkState(body_id, link_id)
+    return np.array([x,y,z,a,b,c,d])
+
 class PybulletMujocoEnv(gym.Env):
     def __init__(self, model_xml, robot_name, timestep, frame_skip, action_dim, obs_dim, repeats):
         self.action_space = gym.spaces.Box(-1.0, 1.0, shape=(action_dim,))
@@ -34,12 +41,15 @@ class PybulletMujocoEnv(gym.Env):
         self._seed()
         
     def getScene(self, bodies):
+        parts = {}
         joints = {}
         for i in range(len(bodies)):
             for j in range(p.getNumJoints(bodies[i])):
-                _,name,_,_,_,_,_,_,_,_,_,_ = p.getJointInfo(bodies[i],j)
-                joints[name] = Joint(bodies,i,j)
-                joints[name].disable_motor()
+                _,joint_name,_,_,_,_,_,_,_,_,_,_,part_name = p.getJointInfo(bodies[i],j)
+                joints[joint_name] = Joint(bodies,i,j)
+                joints[joint_name].disable_motor()
+                
+                parts[part_name] = BodyPart(bodies,i)
         return bodies, joints
 
     def _seed(self, seed=None):
@@ -49,8 +59,12 @@ class PybulletMujocoEnv(gym.Env):
 
 
 class BodyPart:
-    def __init__(self):
-        pass
+    def __init__(self, bodies, bodyIndex):
+        self.bodies = bodies
+        self.bodyIndex = bodyIndex
+    
+    def get_state(self):
+        return state_fields_of_pose_of(self.bodies[self.bodyIndex])
     
 class Joint:
     def __init__(self, bodies, bodyIndex, jointIndex):
