@@ -49,7 +49,7 @@ class PybulletMujocoEnv(gym.Env):
                 joints[joint_name] = Joint(bodies,i,j)
                 joints[joint_name].disable_motor()
                 
-                parts[part_name] = BodyPart(bodies,i)
+                parts[part_name] = BodyPart(bodies,i,j)
         return parts, joints
 
     def _seed(self, seed=None):
@@ -59,24 +59,37 @@ class PybulletMujocoEnv(gym.Env):
 
 
 class BodyPart:
-    def __init__(self, bodies, bodyIndex):
+    def __init__(self, bodies, bodyIndex, bodyPartIndex):
         self.bodies = bodies
         self.bodyIndex = bodyIndex
+        self.bodyPartIndex = bodyPartIndex
+        self.initialPosition = self.current_position()
+        self.initialOrientation = self.current_orientation()
     
     def get_pose(self):
-        return state_fields_of_pose_of(self.bodies[self.bodyIndex])
+        return state_fields_of_pose_of(self.bodies[self.bodyIndex], self.bodyPartIndex)
     
     def current_position(self):
-        return self.get_pose()[:3];
+        return self.get_pose()[:3]
     
     def current_orientation(self):
-        return self.get_pose()[4:];
+        return self.get_pose()[3:]
+    
+    def reset_position(self, position):
+        p.resetBasePositionAndOrientation(self.bodies[self.bodyIndex], position, self.get_orientation())
+        
+    def reset_orientation(self, orientation):
+        p.resetBasePositionAndOrientation(self.bodies[self.bodyIndex], self.get_position(), orientation)
+        
+    def reset_pose(self, position, orientation):
+        p.resetBasePositionAndOrientation(self.bodies[self.bodyIndex], position, orientation)
     
 class Joint:
     def __init__(self, bodies, bodyIndex, jointIndex):
         self.bodies = bodies
         self.bodyIndex = bodyIndex
         self.jointIndex = jointIndex
+        _,_,_,_,_,_,_,_,self.lowerLimit, self.upperLimit,_,_,_ = p.getJointInfo(self.bodies[self.bodyIndex], self.jointIndex)
         
     def set_state(self, x, vx):
         p.resetJointState(self.bodies[self.bodyIndex], self.jointIndex, x, vx)
@@ -97,5 +110,6 @@ class Joint:
     def reset_position(self, position):
         self.set_position(position)
         self.disable_motor()
+
     def disable_motor(self):
         p.setJointMotorControl2(self.bodies[self.bodyIndex],self.jointIndex,controlMode=p.VELOCITY_CONTROL, force=0)

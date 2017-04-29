@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Reacher environment originally built for the MuJoCo physics engine
+# Hopper environment originally built for the MuJoCo physics engine
 
 import gym
 from gym import spaces
@@ -23,9 +23,7 @@ def add_opts(parser):
     parser.add_argument('--max-episode-len', type=int, default=200,
                       help="maximum episode length")
 
-class MJCFReacherv0Env(PybulletMujocoEnv):
-    
-    TARG_LIMIT = 0.27
+class MJCFHopperv0Env(PybulletMujocoEnv):
     
     def __init__(self, opts):
         self.gui = opts.gui
@@ -42,15 +40,15 @@ class MJCFReacherv0Env(PybulletMujocoEnv):
 
         # setup bullet
         p.connect(p.GUI if self.gui else p.DIRECT)
+        p.setGravity(0,0,-9.81)
         
-        PybulletMujocoEnv.__init__(self, "envs/models/mjcf/reacher.xml", "walker", 0.02, frame_skip=2, action_dim=2, obs_dim=9, repeats=self.repeats)
+        PybulletMujocoEnv.__init__(self, "envs/models/mjcf/hopper.xml", "walker", 0.02, frame_skip=2, action_dim=3, obs_dim=8, repeats=self.repeats)
 
-        self.target_x = self.joints["target_x"]
-        self.target_y = self.joints["target_y"]
-        self.fingertip = self.parts["fingertip"]
-        self.target    = self.parts["target"]
-        self.central_joint = self.joints["joint0"]
-        self.elbow_joint   = self.joints["joint1"]
+        self.torso = self.parts["torso"]
+        self.foot = self.parts["foot"]
+        self.thigh_joint = self.joints["thigh_joint"]
+        self.leg_joint = self.joints["leg_joint"]
+        self.foot_joint = self.joints["foot_joint"]
         
         self.metadata = {
             'discrete_actions' : False,
@@ -85,8 +83,9 @@ class MJCFReacherv0Env(PybulletMujocoEnv):
         for r in xrange(self.repeats):
             for _ in xrange(self.steps_per_repeat):
                 p.stepSimulation()
-                self.central_joint.set_torque( 0.07*float(np.clip(action[0], -1, +1)) )
-                self.elbow_joint.set_torque( 0.07*float(np.clip(action[1], -1, +1)) )
+                self.thigh_joint.set_torque( 75*float(np.clip(action[0], -1, +1)) )
+                self.leg_joint.set_torque( 75*float(np.clip(action[1], -1, +1)) )
+                self.foot_joint.set_torque(75*float(np.clip(action[2],-1, +1)))
                 if self.delay > 0:
                     time.sleep(self.delay)
             self.set_state_element_for_repeat(r)
@@ -97,50 +96,45 @@ class MJCFReacherv0Env(PybulletMujocoEnv):
             info['done_reason'] = 'episode length'
             self.done = True
         
-        self.to_target_vec = np.array(self.fingertip.current_position()) - np.array(self.target.current_position())
-        reward_dist = - np.linalg.norm(self.to_target_vec)
-        reward_ctrl = - np.square(action).sum()
-        reward_rotation = - np.square(self.theta_dot*self.dt) - np.square(self.gamma_dot*self.dt)
-        self.rewards = [reward_dist, reward_ctrl, reward_rotation]
+        self.speed = self.foot.current_position()[0]-self.last_position
+        self.last_position = self.foot.current_position()[0]
+        self.rewards = [self.speed]
         
         # return observation
-        return self.state, reward_dist + reward_ctrl + reward_rotation, self.done, info
+        return self.state, self.speed, self.done, info
         
     def set_state_element_for_repeat(self, repeat):
         # in low dim case state is (R, obs_dim)
         # R -> repeat, obs_dim -> obs_dim d pose
-        theta, self.theta_dot = self.central_joint.get_state()
-        gamma, self.gamma_dot = self.elbow_joint.get_state()
-        target_x, _ = self.target_x.get_state()
-        target_y, _ = self.target_y.get_state()
-        self.to_target_vec = np.array(self.fingertip.current_position()) - np.array(self.target.current_position())
+        height = self.foot.current_position()[2]
+        theta, self.theta_dot = self.thigh_joint.get_state()
+        gamma, self.gamma_dot = self.leg_joint.get_state()
+        phi, self.phi_dot = self.leg_joint.get_state()
         self.state[repeat] = np.array([
-            target_x,
-            target_y,
-            np.cos(theta),
-            np.sin(theta),
+            height,
+            theta,
             self.theta_dot,
             gamma,
             self.gamma_dot,
-            self.to_target_vec[0],
-            self.to_target_vec[1]
+            phi,
+            self.phi_dot,
+            self.speed
             ])
         
     def _reset(self):
         # reset your environment
-        
+              
         # reset state
         self.steps = 0
         self.done = False
- 
-        # reset target to another location
-        self.target_x.set_state(self.np_random.uniform( low=-self.TARG_LIMIT, high=self.TARG_LIMIT ),0)
-        self.target_y.set_state(self.np_random.uniform( low=-self.TARG_LIMIT, high=self.TARG_LIMIT ),0)
+        self.speed = 0
+
+        self.torso.reset_pose(self.torso.initialPosition, self.torso.initialOrientation)
+        self.thigh_joint.reset_position(self.np_random.uniform( low=self.thigh_joint.lowerLimit, high=self.thigh_joint.upperLimit ))
+        self.leg_joint.reset_position(self.np_random.uniform( low=self.leg_joint.lowerLimit, high=self.leg_joint.upperLimit ))
+        self.foot_joint.reset_position(self.np_random.uniform( low=self.foot_joint.lowerLimit, high=self.foot_joint.upperLimit ))
         
-        # reset joints to another location
-        self.central_joint.reset_position(self.np_random.uniform( low=-np.pi, high=np.pi ))
-        self.elbow_joint.reset_position(self.np_random.uniform( low=-np.pi, high=np.pi ))
-        
+        self.last_position = self.foot.current_position()[0]
         # bootstrap state by running for all repeats
         for i in xrange(self.repeats):
             self.set_state_element_for_repeat(i)
