@@ -115,7 +115,7 @@ class Motionv0Env(gym.Env):
         
         self.velocityHelper = VelocityHelper(self.body)
         
-        self.reward = RewardFunction(self.body, RewardFunction.VelocityReward, RewardFunction.XAxis) # velocity in X axis dimension gets rewarded
+        self.reward = RewardFunction(self.body, RewardFunction.PositionReward, RewardFunction.XAxis) # velocity in X axis dimension gets rewarded
         
 
         # in the low dimensional case obs space for problem is (R, num_links, 13)
@@ -187,6 +187,7 @@ class Motionv0Env(gym.Env):
          
         # check if action is NaN
         if np.isnan(action).any():
+            print 'action is NaN'
             info['done_reason'] = 'action is NaN'
             reward = 0
             self.done = True
