@@ -107,8 +107,9 @@ class Joint:
     def set_torque(self, torque):
         p.setJointMotorControl2(self.bodies[self.bodyIndex],self.jointIndex,p.TORQUE_CONTROL, force=torque)
     
-    def reset_position(self, position):
+    def reset_position(self, position, velocity):
         self.set_position(position)
+        self.set_velocity(velocity)
         self.disable_motor()
 
     def disable_motor(self):
