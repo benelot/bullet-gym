@@ -4,7 +4,6 @@ import gym, gym.spaces, gym.utils, gym.utils.seeding
 import numpy as np
 import os, sys
 
-
 class PybulletInvertedPendulum(PybulletMujocoXmlEnv):
 	swingup = False
 
@@ -19,16 +18,16 @@ class PybulletInvertedPendulum(PybulletMujocoXmlEnv):
 		self.slider = self.jdict["slider"]
 		self.j1 = self.jdict["hinge"]
 		u = self.np_random.uniform(low=-.1, high=.1)
-		self.j1.reset_position( u if not self.swingup else 3.1415+u , 0)
-		self.j1.set_torque(0)
+		self.j1.reset_current_position( u if not self.swingup else 3.1415+u , 0)
+		self.j1.set_motor_torque(0)
 
 	def apply_action(self, a):
-		assert(np.isfinite(a).all())
-		self.slider.set_torque(100*float(np.clip(a[0], -1, +1)))
+		assert( np.isfinite(a).all() )
+		self.slider.set_motor_torque( 100*float(np.clip(a[0], -1, +1)) )
 
 	def calc_state(self):
-		self.theta, theta_dot = self.j1.get_state()
-		x, vx = self.slider.get_state()
+		self.theta, theta_dot = self.j1.current_position()
+		x, vx = self.slider.current_position()
 		assert( np.isfinite(x) )
 		return np.array([
 			x, vx,
@@ -46,21 +45,15 @@ class PybulletInvertedPendulum(PybulletMujocoXmlEnv):
 		else:
 			reward = 1.0
 			done = np.abs(self.theta) > .2
-
-		if done:
-			print("\nResetting...")
 		self.rewards = [float(reward)]
-		#self.HUD(state, a, done)
+		self.HUD(state, a, done)
 		return state, sum(self.rewards), done, {}
 
 	def camera_adjust(self):
-		#self.camera.move_and_look_at(0,1.2,1.2, 0,0,0.5)
-		p.resetDebugVisualizerCamera(distance,yaw,-20,[0,0,0.5]);
-
+		self.camera.move_and_look_at(0,1.2,1.0, 0,0,0.5)
 
 class PybulletInvertedPendulumSwingup(PybulletInvertedPendulum):
 	swingup = True
-
 
 class PybulletInvertedDoublePendulum(PybulletMujocoXmlEnv):
 	def __init__(self):
@@ -75,20 +68,20 @@ class PybulletInvertedDoublePendulum(PybulletMujocoXmlEnv):
 		self.j1 = self.jdict["hinge"]
 		self.j2 = self.jdict["hinge2"]
 		u = self.np_random.uniform(low=-.1, high=.1, size=[2])
-		self.j1.reset_position(float(u[0]), 0)
-		self.j2.reset_position(float(u[1]), 0)
-		self.j1.disable_motor()
-		self.j2.disable_motor()
+		self.j1.reset_current_position(float(u[0]), 0)
+		self.j2.reset_current_position(float(u[1]), 0)
+		self.j1.set_motor_torque(0)
+		self.j2.set_motor_torque(0)
 
 	def apply_action(self, a):
 		assert( np.isfinite(a).all() )
-		self.slider.set_torque( 200*float(np.clip(a[0], -1, +1)) )
+		self.slider.set_motor_torque( 200*float(np.clip(a[0], -1, +1)) )
 
 	def calc_state(self):
-		theta, theta_dot = self.j1.get_state()
-		gamma, gamma_dot = self.j2.get_state()
-		x, vx = self.slider.get_state()
-		self.pos_x, _, self.pos_y = self.pole2.current_position()
+		theta, theta_dot = self.j1.current_position()
+		gamma, gamma_dot = self.j2.current_position()
+		x, vx = self.slider.current_position()
+		self.pos_x, _, self.pos_y = self.pole2.pose().xyz()
 		assert( np.isfinite(x) )
 		return np.array([
 			x, vx,
@@ -110,9 +103,8 @@ class PybulletInvertedDoublePendulum(PybulletMujocoXmlEnv):
 		alive_bonus = 10
 		done = self.pos_y + 0.3 <= 1
 		self.rewards = [float(alive_bonus), float(-dist_penalty), float(-vel_penalty)]
-#		self.HUD(state, a, done)
+		self.HUD(state, a, done)
 		return state, sum(self.rewards), done, {}
 
 	def camera_adjust(self):
-		#self.camera.move_and_look_at(0,1.2,1.2, 0,0,0.5)
-		p.resetDebugVisualizerCamera(distance,yaw,-20,[0,0,0.5]);
+		self.camera.move_and_look_at(0,1.2,1.2, 0,0,0.5)
