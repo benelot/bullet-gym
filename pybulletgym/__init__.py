@@ -98,8 +98,39 @@ from pybulletgym.envs.gym_pendula import PybulletInvertedPendulumSwingup
 from pybulletgym.agents import agent_register
 
 agent_register.register(
+	id='BaselinesDQNAgent-v0',
+	entry_point='agents.BaselinesDQNAgent:BaseLinesDQNAgent'
+)
+
+agent_register.register(
+	id='KerasCEMAgent-v0',
+	entry_point='agents.KerasCEMAgent:KerasCEMAgent'
+)
+
+agent_register.register(
 	id='KerasDDPGAgent-v0',
 	entry_point='agents.KerasDDPGAgent:KerasDDPGAgent'
 )
 
+agent_register.register(
+	id='KerasDDQNAgent-v0',
+	entry_point='agents.KerasDDQNAgent:KerasDDQNAgent'
+)
+
+agent_register.register(
+	id='KerasDQNAgent-v0',
+	entry_point='agents.KerasDQNAgent:KerasDQNAgent'
+)
+
+agent_register.register(
+	id='KerasNAFAgent-v0',
+	entry_point='agents.KerasNAFAgent:KerasNAFAgent'
+)
+
+from pybulletgym.agents.BaselinesDQNAgent import BaselinesDQNAgent
+
+from pybulletgym.agents.KerasCEMAgent import KerasCEMAgent
 from pybulletgym.agents.KerasDDPGAgent import KerasDDPGAgent
+from pybulletgym.agents.KerasDDQNAgent import KerasDDQNAgent
+from pybulletgym.agents.KerasDQNAgent import KerasDQNAgent
+from pybulletgym.agents.KerasNAFAgent import KerasNAFAgent
