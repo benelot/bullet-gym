@@ -30,8 +30,6 @@ class PybulletMujocoXmlEnv(gym.Env):
 
 		self.camera = Camera()
 
-		self.pose = Pose(self)
-
 	def _seed(self, seed=None):
 		self.np_random, seed = gym.utils.seeding.np_random(seed)
 		return [seed]
@@ -97,9 +95,6 @@ class PybulletMujocoXmlEnv(gym.Env):
 	def HUD(self, state, a, done):
 		pass
 
-	def pose(self):
-		return self.pose
-
 class Camera:
 	def __init__(self):
 		pass
@@ -110,12 +105,12 @@ class Camera:
 		yaw = 10
 		p.resetDebugVisualizerCamera(distance, yaw, -20, lookat)
 
-class Pose:
-	def __init__(self, env):
-		self.env = env
+class Pose_Helper: # dummy class to comply to original interface
+	def __init__(self, body_part):
+		self.body_part = body_part
 
 	def xyz(self):
-		self.env.current_position()
+		return self.body_part.current_position()
 
 class BodyPart:
 	def __init__(self, body_name, bodies, bodyIndex, bodyPartIndex):
@@ -124,6 +119,7 @@ class BodyPart:
 		self.bodyPartIndex = bodyPartIndex
 		self.initialPosition = self.current_position()
 		self.initialOrientation = self.current_orientation()
+		self.bp_pose = Pose_Helper(self)
 
 	def state_fields_of_pose_of(self, body_id, link_id=-1):  # a method you will most probably need a lot to get pose and orientation
 		if link_id == -1:
@@ -149,6 +145,9 @@ class BodyPart:
 
 	def reset_pose(self, position, orientation):
 		p.resetBasePositionAndOrientation(self.bodies[self.bodyIndex], position, orientation)
+
+	def pose(self):
+		return self.bp_pose
 
 
 class Joint:
