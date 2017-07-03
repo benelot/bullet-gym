@@ -14,7 +14,7 @@ np.set_printoptions(precision=3, suppress=True, linewidth=10000)
 def add_opts(parser):
 	parser.add_argument('--agent', type=str, default="KerasDQNAgent", help="Agent to be trained with.")
 	parser.add_argument('--env', type=str, default="2DDetachedCartPolev0Env", help="Environment to be trained in.")
-	parser.add_argument('--continue-training', action='store_true', help="Should the trainer try to continue training with the most recent save?")
+	parser.add_argument('--use-latest', action='store_true', help="Should the trainer retrain/show with the most recent save?")
 	parser.add_argument('--train-for', type=int, default=100, help="The number of epochs to train for.")
 	parser.add_argument('--test-for', type=int, default=0, help="The number of epoch to test for.")
 	parser.add_argument('--load-file', type=str, default=None, help="The weight file to load for training.")
@@ -56,13 +56,13 @@ class Trainer:
 			else:
 				agent.configure(env.observation_space.shape, env.action_space.shape[0]) # configure agent to use the environment properties
 
-			if opts.continue_training:
+			if opts.use_latest:
 				properties = kerasrl_utils.get_latest_save("checkpoints/", opts.agent, opts.env, 0)
 				if properties == []:
 					print("No previous weight saves for found for %s-%s" % (opts.agent, opts.env))
 				else:
 					opts.load_file = "checkpoints/%s-%s-%s.h5" % (properties[0], properties[1], properties[2])
-					print("Continue training from: %s " % opts.load_file)
+					print("Continue from [%s] " % opts.load_file)
 
 			if opts.load_file is not None:
 				print("loading weights from [%s]" % opts.load_file)
