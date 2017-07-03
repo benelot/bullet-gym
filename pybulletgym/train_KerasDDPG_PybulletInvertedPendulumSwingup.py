@@ -17,7 +17,7 @@ opts.env = "PybulletInvertedPendulumSwingup-v0"
 opts.train_for=10000000
 opts.test_for=0
 datenow = '{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-opts.save_file="checkpoints/KerasDDPG-InvertedPendulumSwingup-v0-"+datenow+".h5"
+opts.save_file = "checkpoints/%s-%s-%s.h5" % (opts.agent, opts.env, datenow)
 
 print("\n OPTS", opts)
 
