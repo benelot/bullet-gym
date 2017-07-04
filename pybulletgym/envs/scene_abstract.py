@@ -9,8 +9,6 @@
 import sys, os
 sys.path.append(os.path.dirname(__file__))
 import pybullet as p
-#from roboschool import cpp_household_d as cpp_household    # you can debug C++ code
-#from roboschool  import cpp_household   as cpp_household
 
 import gym
 
@@ -66,15 +64,14 @@ class Scene:
         self.cpp_world.step(self.frame_skip)
 
 class SingleRobotEmptyScene(Scene):
-    multiplayer = False  # this class is used "as is" for InvertedPundulum, Reacher
+    multiplayer = False  # this class is used "as is" for InvertedPendulum, Reacher
 
 class World:
 
 	def __init__(self, gravity, timestep):
 		self.gravity = gravity
 		self.timestep = timestep
-		p.setGravity(0,0,-gravity)
-		p.setPhysicsEngineParameter(fixedTimeStep=timestep, numSolverIterations=5, numSubSteps=2)
+		self.clean_everything()
 
 	def clean_everything(self):
 		p.resetSimulation()

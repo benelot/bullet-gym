@@ -59,7 +59,7 @@ class Trainer:
 			if opts.use_latest:
 				properties = kerasrl_utils.get_latest_save("checkpoints/", opts.agent, opts.env, 0)
 				if properties == []:
-					print("No previous weight saves for found for %s-%s" % (opts.agent, opts.env))
+					print("No previous weight saves found for %s-%s" % (opts.agent, opts.env))
 				else:
 					opts.load_file = "checkpoints/%s-%s-%s.h5" % (properties[0], properties[1], properties[2])
 					print("Continue from [%s] " % opts.load_file)

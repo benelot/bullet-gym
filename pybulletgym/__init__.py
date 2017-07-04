@@ -21,13 +21,13 @@ register(
 	reward_threshold=800.0,
 	)
 
-#register(
-#	id='RoboschoolReacher-v0',
-#	entry_point='roboschool:RoboschoolReacher',
-#	max_episode_steps=150,
-#	reward_threshold=-3.75,
-#	)
-#
+register(
+	id='PybulletReacher-v0',
+	entry_point='envs.gym_manipulators:PybulletReacher',
+	max_episode_steps=150,
+	reward_threshold=-3.75,
+	)
+
 #register(
 #	id='RoboschoolPusher-v0',
 #	entry_point='roboschool:RoboschoolPusher',
@@ -49,12 +49,12 @@ register(
 #	reward_threshold=0.0,
 #)
 #
-#register(
-#	id='RoboschoolHopper-v0',
-#	entry_point='roboschool:RoboschoolHopper',
-#	max_episode_steps=1000,
-#	reward_threshold=3800.0	#~12 jumps
-#	)
+register(
+	id='PybulletHopper-v0',
+	entry_point='envs.gym_forward_walkers:PybulletHopper',
+	max_episode_steps=1000,
+	reward_threshold=3800.0	#~12 jumps
+	)
 #register(
 #	id='RoboschoolWalker2d-v0',
 #	entry_point='roboschool:RoboschoolWalker2d',
@@ -94,6 +94,7 @@ register(
 from pybulletgym.envs.gym_pendula import PybulletInvertedPendulum
 from pybulletgym.envs.gym_pendula import PybulletInvertedDoublePendulum
 from pybulletgym.envs.gym_pendula import PybulletInvertedPendulumSwingup
+from pybulletgym.envs.gym_manipulators import PybulletReacher
 
 from pybulletgym.agents import agent_register
 

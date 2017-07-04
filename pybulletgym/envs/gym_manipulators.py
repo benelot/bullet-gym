@@ -5,7 +5,7 @@ import numpy as np
 import os, sys
 
 
-class RoboschoolReacher(PybulletMujocoXmlEnv):
+class PybulletReacher(PybulletMujocoXmlEnv):
 	def __init__(self):
 		PybulletMujocoXmlEnv.__init__(self, 'reacher.xml', 'body0', action_dim=2, obs_dim=9)
 
@@ -14,14 +14,14 @@ class RoboschoolReacher(PybulletMujocoXmlEnv):
 
 	TARG_LIMIT = 0.27
 	def robot_specific_reset(self):
-		self.jdict["target_x"].reset_current_position(self.np_random.uniform( low=-self.TARG_LIMIT, high=self.TARG_LIMIT ))
-		self.jdict["target_y"].reset_current_position(self.np_random.uniform( low=-self.TARG_LIMIT, high=self.TARG_LIMIT ))
+		self.jdict["target_x"].reset_current_position(self.np_random.uniform( low=-self.TARG_LIMIT, high=self.TARG_LIMIT ), 0)
+		self.jdict["target_y"].reset_current_position(self.np_random.uniform( low=-self.TARG_LIMIT, high=self.TARG_LIMIT ), 0)
 		self.fingertip = self.parts["fingertip"]
 		self.target	= self.parts["target"]
 		self.central_joint = self.jdict["joint0"]
 		self.elbow_joint   = self.jdict["joint1"]
-		self.central_joint.reset_current_position(self.np_random.uniform( low=-3.14, high=3.14 ))
-		self.elbow_joint.reset_current_position(self.np_random.uniform( low=-3.14, high=3.14 ))
+		self.central_joint.reset_current_position(self.np_random.uniform( low=-3.14, high=3.14 ), 0)
+		self.elbow_joint.reset_current_position(self.np_random.uniform( low=-3.14, high=3.14 ), 0)
 
 	def apply_action(self, a):
 		assert( np.isfinite(a).all() )
@@ -29,7 +29,7 @@ class RoboschoolReacher(PybulletMujocoXmlEnv):
 		self.elbow_joint.set_motor_torque( 0.05*float(np.clip(a[1], -1, +1)) )
 
 	def calc_state(self):
-		theta,	  self.theta_dot = self.central_joint.current_relative_position()
+		theta,	 self.theta_dot = self.central_joint.current_relative_position()
 		self.gamma, self.gamma_dot = self.elbow_joint.current_relative_position()
 		target_x, _ = self.jdict["target_x"].current_position()
 		target_y, _ = self.jdict["target_y"].current_position()
@@ -75,7 +75,7 @@ class RoboschoolReacher(PybulletMujocoXmlEnv):
 		self.camera.move_and_look_at(0.3, 0.3, 0.3, x, y, z)
 
 
-class RoboschoolPusher(PybulletMujocoXmlEnv):
+class PybulletPusher(PybulletMujocoXmlEnv):
 	def __init__(self):
 		PybulletMujocoXmlEnv.__init__(self, 'pusher.xml', 'body0', action_dim=7, obs_dim=5)
 
@@ -84,22 +84,22 @@ class RoboschoolPusher(PybulletMujocoXmlEnv):
 
 	def robot_specific_reset(self):
 		self.fingertip = self.parts["fingertip"]
-#		 qpos = self.init_qpos
-# 
-#		 self.goal_pos = np.asarray([0, 0])
-#		 while True:
-#			 self.cylinder_pos = np.concatenate([
-#					 self.np_random.uniform(low=-0.3, high=0, size=1),
-#					 self.np_random.uniform(low=-0.2, high=0.2, size=1)])
-#			 if np.linalg.norm(self.cylinder_pos - self.goal_pos) > 0.17:
-#				 break
-# 
-#		 qpos[-4:-2] = self.cylinder_pos
-#		 qpos[-2:] = self.goal_pos
-#		 qvel = self.init_qvel + self.np_random.uniform(low=-0.005,
-#				 high=0.005, size=self.model.nv)
-#		 qvel[-4:] = 0
-#		 self.set_state(qpos, qvel)
+#		qpos = self.init_qpos
+
+		self.goal_pos = np.asarray([0, 0])
+		while True:
+			self.cylinder_pos = np.concatenate([
+					self.np_random.uniform(low=-0.3, high=0, size=1),
+					self.np_random.uniform(low=-0.2, high=0.2, size=1)])
+			if np.linalg.norm(self.cylinder_pos - self.goal_pos) > 0.17:
+				break
+
+#		qpos[-4:-2] = self.cylinder_pos
+#		qpos[-2:] = self.goal_pos
+#		qvel = self.init_qvel + self.np_random.uniform(low=-0.005,
+#				high=0.005, size=self.model.nv)
+#		qvel[-4:] = 0
+#		self.set_state(qpos, qvel)
 
 	def apply_action(self, a):
 		assert( np.isfinite(a).all() )
@@ -114,6 +114,12 @@ class RoboschoolPusher(PybulletMujocoXmlEnv):
 		])
 
 	def _step(self, a):
+
+		self.apply_action(a)
+		self.scene.global_step()
+
+		state = self.calc_state()
+
 		reward_near_vec = self.parts["object"].pose().xyz() - self.parts["fingertip"].pose().xyz()
 		reward_dist_vec = self.parts["object"].pose().xyz() - self.parts["goal"].pose().xyz()
 
@@ -122,11 +128,8 @@ class RoboschoolPusher(PybulletMujocoXmlEnv):
 		reward_ctrl = - np.square(a).sum()
 		reward = reward_dist + 0.1 * reward_ctrl + 0.5 * reward_near
 
-		self.do_simulation(a, self.frame_skip)
-		state = self.calc_state()
 		done = False
-		return state, reward, done, dict(reward_dist=reward_dist,
-				reward_ctrl=reward_ctrl)
+		return state, reward, done, dict(reward_dist=reward_dist, reward_ctrl=reward_ctrl)
 
 	def camera_adjust(self):
 		x, y, z = self.fingertip.pose().xyz()
@@ -136,7 +139,7 @@ class RoboschoolPusher(PybulletMujocoXmlEnv):
 
 
 
-class RoboschoolStriker(PybulletMujocoXmlEnv):
+class PybulletStriker(PybulletMujocoXmlEnv):
 	def __init__(self):
 		PybulletMujocoXmlEnv.__init__(self, 'striker.xml', 'body0', action_dim=7, obs_dim=5)
 		self._striked = False
@@ -160,26 +163,26 @@ class RoboschoolStriker(PybulletMujocoXmlEnv):
 		
 		# reset ball position
 
-#		 qpos = self.init_qpos
+#		qpos = self.init_qpos
 
-#		 self.ball = np.array([0.5, -0.175])
+		self.ball = np.array([0.5, -0.175])
 
-#		 while True:
-#			 self.goal = np.concatenate([
-#					 self.np_random.uniform(low=0.15, high=0.7, size=1),
-#					 self.np_random.uniform(low=0.1, high=1.0, size=1)])
-#			 if np.linalg.norm(self.ball - self.goal) > 0.17:
-#				 break
+		while True:
+			self.goal = np.concatenate([
+					self.np_random.uniform(low=0.15, high=0.7, size=1),
+					self.np_random.uniform(low=0.1, high=1.0, size=1)])
+			if np.linalg.norm(self.ball - self.goal) > 0.17:
+				break
 # 
-#		 qpos[-9:-7] = [self.ball[1], self.ball[0]]
-#		 qpos[-7:-5] = self.goal
-#		 diff = self.ball - self.goal
-#		 angle = -np.arctan(diff[0] / (diff[1] + 1e-8))
-#		 qpos[-1] = angle / 3.14
-#		 qvel = self.init_qvel + self.np_random.uniform(low=-.1, high=.1,
-#				 size=self.model.nv)
-#		 qvel[7:] = 0
-#		 self.set_state(qpos, qvel)
+#		qpos[-9:-7] = [self.ball[1], self.ball[0]]
+#		qpos[-7:-5] = self.goal
+#		diff = self.ball - self.goal
+#		angle = -np.arctan(diff[0] / (diff[1] + 1e-8))
+#		qpos[-1] = angle / 3.14
+#		qvel = self.init_qvel + self.np_random.uniform(low=-.1, high=.1,
+#				size=self.model.nv)
+#		qvel[7:] = 0
+#		self.set_state(qpos, qvel)
 
 	def apply_action(self, a):
 		assert( np.isfinite(a).all() )
@@ -194,6 +197,10 @@ class RoboschoolStriker(PybulletMujocoXmlEnv):
 		])
 
 	def _step(self, a):
+		self.apply_action(a)
+		self.scene.global_step()
+		state = self.calc_state()
+
 		dist_object_finger = self.parts["object"].pose().xyz() - self.parts["fingertip"].pose().xyz()
 		reward_dist_vec = self.parts["object"].pose().xyz() - self.parts["goal"].pose().xyz()
 
@@ -214,11 +221,8 @@ class RoboschoolStriker(PybulletMujocoXmlEnv):
 		reward_ctrl = - np.square(a).sum()
 		reward = 3 * reward_dist + 0.1 * reward_ctrl + 0.5 * reward_near
 
-		self.do_simulation(a, self.frame_skip)
 		done = False
-		state = self.calc_state()
-		return state, reward, done, dict(reward_dist=reward_dist,
-				reward_ctrl=reward_ctrl)
+		return state, reward, done, dict(reward_dist=reward_dist, reward_ctrl=reward_ctrl)
 
 	def camera_adjust(self):
 		x, y, z = self.fingertip.pose().xyz()
@@ -227,7 +231,7 @@ class RoboschoolStriker(PybulletMujocoXmlEnv):
 		self.camera.move_and_look_at(0.3, 0.3, 0.3, x, y, z)
 
 
-class RoboschoolThrower(PybulletMujocoXmlEnv):
+class PybulletThrower(PybulletMujocoXmlEnv):
 	def __init__(self):
 		PybulletMujocoXmlEnv.__init__(self, 'thrower.xml', 'body0', action_dim=7, obs_dim=5)
 		self._ball_hit_ground = False
@@ -242,20 +246,20 @@ class RoboschoolThrower(PybulletMujocoXmlEnv):
 		self._ball_hit_location = None
 		
 		# reset position of manipulator
-#		 for j in self.ordered_joints:
-#			 j.reset_current_position(self.np_random.uniform( low=-0.1, high=0.1 ))
+		for j in self.ordered_joints:
+			j.reset_current_position(self.np_random.uniform( low=-0.1, high=0.1 ))
 			
 		# reset speed of manipulator
 
-#		 qpos = self.init_qpos
-#		 self.goal = np.array([self.np_random.uniform(low=-0.3, high=0.3),
-#							   self.np_random.uniform(low=-0.3, high=0.3)])
+#		qpos = self.init_qpos
+#		self.goal = np.array([self.np_random.uniform(low=-0.3, high=0.3),
+#							  self.np_random.uniform(low=-0.3, high=0.3)])
 # 
-#		 qpos[-9:-7] = self.goal
-#		 qvel = self.init_qvel + self.np_random.uniform(low=-0.005,
-#				 high=0.005, size=self.model.nv)
-#		 qvel[7:] = 0
-#		 self.set_state(qpos, qvel)
+#		qpos[-9:-7] = self.goal
+#		qvel = self.init_qvel + self.np_random.uniform(low=-0.005,
+#				high=0.005, size=self.model.nv)
+#		qvel[7:] = 0
+#		self.set_state(qpos, qvel)
 
 	def apply_action(self, a):
 		assert( np.isfinite(a).all() )
@@ -270,6 +274,10 @@ class RoboschoolThrower(PybulletMujocoXmlEnv):
 		])
 
 	def _step(self, a):
+		self.apply_action(a)
+		self.scene.global_step()
+		state = self.calc_state()
+
 		ball_xy = self.parts["ball"].pose().xyz()[:2]
 		goal_xy = self.parts["goal"].pose().xyz()[:2]
 
@@ -285,11 +293,9 @@ class RoboschoolThrower(PybulletMujocoXmlEnv):
 		reward_ctrl = - np.square(a).sum()
 
 		reward = reward_dist + 0.002 * reward_ctrl
-		self.do_simulation(a, self.frame_skip)
-		state = self.calc_state()
+
 		done = False
-		return state, reward, done, dict(reward_dist=reward_dist,
-				reward_ctrl=reward_ctrl)
+		return state, reward, done, dict(reward_dist=reward_dist, reward_ctrl=reward_ctrl)
 
 	def camera_adjust(self):
 		x, y, z = self.fingertip.pose().xyz()

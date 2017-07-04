@@ -112,6 +112,9 @@ class Pose_Helper: # dummy class to comply to original interface
 	def xyz(self):
 		return self.body_part.current_position()
 
+	def rpy(self):
+		return p.getEulerFromQuaternion(self.body_part.current_orientation())
+
 class BodyPart:
 	def __init__(self, body_name, bodies, bodyIndex, bodyPartIndex):
 		self.bodies = bodies
@@ -130,6 +133,10 @@ class BodyPart:
 
 	def get_pose(self):
 		return self.state_fields_of_pose_of(self.bodies[self.bodyIndex], self.bodyPartIndex)
+
+	def speed(self):
+		(x,y,z), (a,b,c,d), _,_,_,_, (vx, vy, vz), (vr,vp,vy) = p.getLinkState(self.bodies[self.bodyIndex], self.bodyPartIndex, computeLinkVelocity=1)
+		return np.array([vx,vy,vz])
 
 	def current_position(self):
 		return self.get_pose()[:3]
@@ -162,6 +169,9 @@ class Joint:
 		p.resetJointState(self.bodies[self.bodyIndex], self.jointIndex, x, vx)
 
 	def current_position(self): # just some synonyme method
+		return self.get_state()
+
+	def current_relative_position(self): # should we really calculate some kind of relative position?
 		return self.get_state()
 
 	def get_state(self):
