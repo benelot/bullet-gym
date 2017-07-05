@@ -194,8 +194,7 @@ class Joint:
 		self.reset_position(position, velocity)
 
 	def reset_position(self, position, velocity):
-		self.set_position(position)
-		self.set_velocity(velocity)
+		p.resetJointState(self.bodies[self.bodyIndex],self.jointIndex,targetValue=position, targetVelocity=velocity)
 		self.disable_motor()
 
 	def disable_motor(self):

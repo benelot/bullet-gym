@@ -25,8 +25,8 @@ class PybulletReacher(PybulletMujocoXmlEnv):
 
 	def apply_action(self, a):
 		assert( np.isfinite(a).all() )
-		self.central_joint.set_motor_torque( 0.05*float(np.clip(a[0], -1, +1)) )
-		self.elbow_joint.set_motor_torque( 0.05*float(np.clip(a[1], -1, +1)) )
+		self.central_joint.set_motor_torque( 0.05 * a[0]) #0.05*float(np.clip(a[0], -1, +1)) )
+		self.elbow_joint.set_motor_torque( 0.05 * a[1]) # 0.05*float(np.clip(a[1], -1, +1)) )
 
 	def calc_state(self):
 		theta,	 self.theta_dot = self.central_joint.current_relative_position()
@@ -94,6 +94,7 @@ class PybulletPusher(PybulletMujocoXmlEnv):
 			if np.linalg.norm(self.cylinder_pos - self.goal_pos) > 0.17:
 				break
 
+# This is probably position setting
 #		qpos[-4:-2] = self.cylinder_pos
 #		qpos[-2:] = self.goal_pos
 #		qvel = self.init_qvel + self.np_random.uniform(low=-0.005,
@@ -138,7 +139,6 @@ class PybulletPusher(PybulletMujocoXmlEnv):
 		self.camera.move_and_look_at(0.3, 0.3, 0.3, x, y, z)
 
 
-
 class PybulletStriker(PybulletMujocoXmlEnv):
 	def __init__(self):
 		PybulletMujocoXmlEnv.__init__(self, 'striker.xml', 'body0', action_dim=7, obs_dim=5)
@@ -173,7 +173,7 @@ class PybulletStriker(PybulletMujocoXmlEnv):
 					self.np_random.uniform(low=0.1, high=1.0, size=1)])
 			if np.linalg.norm(self.ball - self.goal) > 0.17:
 				break
-# 
+# This is probably position setting
 #		qpos[-9:-7] = [self.ball[1], self.ball[0]]
 #		qpos[-7:-5] = self.goal
 #		diff = self.ball - self.goal
@@ -250,7 +250,7 @@ class PybulletThrower(PybulletMujocoXmlEnv):
 			j.reset_current_position(self.np_random.uniform( low=-0.1, high=0.1 ))
 			
 		# reset speed of manipulator
-
+# This is probably position setting
 #		qpos = self.init_qpos
 #		self.goal = np.array([self.np_random.uniform(low=-0.3, high=0.3),
 #							  self.np_random.uniform(low=-0.3, high=0.3)])

@@ -23,7 +23,7 @@ class PybulletInvertedPendulum(PybulletMujocoXmlEnv):
 
 	def apply_action(self, a):
 		assert( np.isfinite(a).all() )
-		self.slider.set_motor_torque( 100*float(np.clip(a[0], -1, +1)) )
+		self.slider.set_motor_torque( 100 * a[0]) # 100*float(np.clip(a[0], -1, +1)) )
 
 	def calc_state(self):
 		self.theta, theta_dot = self.j1.current_position()
@@ -75,7 +75,7 @@ class PybulletInvertedDoublePendulum(PybulletMujocoXmlEnv):
 
 	def apply_action(self, a):
 		assert( np.isfinite(a).all() )
-		self.slider.set_motor_torque( 200*float(np.clip(a[0], -1, +1)) )
+		self.slider.set_motor_torque( 200 * a[0]) # 200*float(np.clip(a[0], -1, +1)) )
 
 	def calc_state(self):
 		theta, theta_dot = self.j1.current_position()

@@ -28,27 +28,27 @@ register(
 	reward_threshold=-3.75,
 	)
 
-#register(
-#	id='RoboschoolPusher-v0',
-#	entry_point='roboschool:RoboschoolPusher',
-#	max_episode_steps=100,
-#	reward_threshold=0.0,
-#)
-#
-#register(
-#	id='RoboschoolThrower-v0',
-#	entry_point='roboschool:RoboschoolThrower',
-#	max_episode_steps=100,
-#	reward_threshold=0.0,
-#)
-#
-#register(
-#	id='RoboschoolStriker-v0',
-#	entry_point='roboschool:RoboschoolStriker',
-#	max_episode_steps=100,
-#	reward_threshold=0.0,
-#)
-#
+register(
+	id='PybulletPusher-v0',
+	entry_point='envs.gym_manipulators:PybulletPusher',
+	max_episode_steps=100,
+	reward_threshold=0.0,
+)
+
+register(
+	id='PybulletThrower-v0',
+	entry_point='envs.gym_manipulators:PybulletThrower',
+	max_episode_steps=100,
+	reward_threshold=0.0,
+)
+
+register(
+	id='PybulletStriker-v0',
+	entry_point='envs.gym_manipulators:PybulletStriker',
+	max_episode_steps=100,
+	reward_threshold=0.0,
+)
+
 register(
 	id='PybulletHopper-v0',
 	entry_point='envs.gym_forward_walkers:PybulletHopper',
