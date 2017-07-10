@@ -74,11 +74,11 @@ register(
 #	reward_threshold=6000.0
 #	)
 #
-#register(
-#	id='RoboschoolHumanoid-v0',
-#	entry_point='roboschool:RoboschoolHumanoid',
-#	max_episode_steps=1000
-#	)
+register(
+	id='PybulletHumanoid-v0',
+	entry_point='envs.gym_forward_walkers:PybulletHumanoid',
+	max_episode_steps=1000
+	)
 #register(
 #	id='RoboschoolHumanoidHarder-v0',
 #	entry_point='roboschool:RoboschoolHumanoidHarder',

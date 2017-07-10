@@ -1,3 +1,5 @@
+from distutils.command.config import config
+
 from pybulletgym.envs.scene_abstract import SingleRobotEmptyScene
 from pybulletgym.envs.scene_stadium import SinglePlayerStadiumScene
 from gym_mujoco_xml_env import PybulletMujocoXmlEnv
@@ -14,13 +16,17 @@ class PybulletForwardWalkersBase(PybulletMujocoXmlEnv):
 		self.walk_target_y = 0
 
 	def create_single_player_scene(self):
-		return SinglePlayerStadiumScene(gravity=9.8, timestep=0.0165/4, frame_skip=4)
+		self.stadium_scene = SinglePlayerStadiumScene(gravity=9.8, timestep=0.0165/4, frame_skip=4)
+		return self.stadium_scene
 
 	def robot_specific_reset(self):
 		for j in self.ordered_joints:
 			j.reset_current_position(self.np_random.uniform( low=-0.1, high=0.1 ), 0)
+
+		self.parts, self.jdict, self.ordered_joints, self.robot_body = self.addToScene(self.stadium_scene.ground_plane_mjcf)
 		self.feet = [self.parts[f] for f in self.foot_list]
 		self.feet_contact = np.array([0.0 for f in self.foot_list], dtype=np.float32)
+		self.ground_ids = set([(self.parts[f].bodies[self.parts[f].bodyIndex], self.parts[f].bodyPartIndex) for f in self.foot_ground_object_names])
 		self.scene.actor_introduce(self)
 		self.initial_z = None
 
@@ -49,6 +55,7 @@ class PybulletForwardWalkersBase(PybulletMujocoXmlEnv):
 		self.body_rpy = body_pose.rpy()
 		z = self.body_xyz[2]
 		r, p, yaw = self.body_rpy
+		(qx, qy, qz, qw) = body_pose.orientation()
 		if self.initial_z==None:
 			self.initial_z = z
 		self.walk_target_theta = np.arctan2( self.walk_target_y - self.body_xyz[1], self.walk_target_x - self.body_xyz[0] )
@@ -64,9 +71,12 @@ class PybulletForwardWalkersBase(PybulletMujocoXmlEnv):
 
 		more = np.array([
 			z-self.initial_z,
-			np.sin(angle_to_target), np.cos(angle_to_target),
+			# np.sin(angle_to_target), np.cos(angle_to_target),
 			0.3*vx, 0.3*vy, 0.3*vz,	# 0.3 is just scaling typical speed into -1..+1, no physical sense here
-			r, p], dtype=np.float32)
+			# r, p
+			qx,qy,qz,qw #TODO: Update this for flagrun after pull-requesting
+		], dtype=np.float32)
+		# #								  8   +  34 +         2
 		return np.clip( np.concatenate([more] + [j] + [self.feet_contact]), -5, +5)
 
 	def calc_potential(self):
@@ -99,10 +109,12 @@ class PybulletForwardWalkersBase(PybulletMujocoXmlEnv):
 
 		feet_collision_cost = 0.0
 		for i,f in enumerate(self.feet):
-			contact_names = set(x.name for x in f.contact_list())
+
+			contact_ids = set((x[2], x[4]) for x in f.contact_list())
+				
 			#print("CONTACT OF '%s' WITH %s" % (f.name, ",".join(contact_names)) )
-			self.feet_contact[i] = 1.0 if (self.foot_ground_object_names & contact_names) else 0.0
-			if contact_names - self.foot_ground_object_names:
+			self.feet_contact[i] = 1.0 if (self.ground_ids & contact_ids) else 0.0
+			if contact_ids - self.ground_ids:
 				feet_collision_cost += self.foot_collision_cost
 
 		electricity_cost  = self.electricity_cost  * float(np.abs(a*self.joint_speeds).mean())  # let's assume we have DC motor with controller, and reverse current braking
@@ -171,6 +183,7 @@ class PybulletAnt(PybulletForwardWalkersBase):
 ## 3d Humanoid ##
 
 class PybulletHumanoid(PybulletForwardWalkersBase):
+	self_collision = True
 	foot_list = ["right_foot", "left_foot"]  # "left_hand", "right_hand"
 
 	def __init__(self):
@@ -178,9 +191,6 @@ class PybulletHumanoid(PybulletForwardWalkersBase):
 		# 17 joints, 4 of them important for walking (hip, knee), others may as well be turned off, 17/4 = 4.25
 		self.electricity_cost  = 4.25*PybulletForwardWalkersBase.electricity_cost
 		self.stall_torque_cost = 4.25*PybulletForwardWalkersBase.stall_torque_cost
-
-	def create_single_player_scene(self):
-		return SinglePlayerStadiumScene(gravity=9.8, timestep=0.0165/4, frame_skip=4)
 
 	def robot_specific_reset(self):
 		PybulletForwardWalkersBase.robot_specific_reset(self)
@@ -195,23 +205,23 @@ class PybulletHumanoid(PybulletForwardWalkersBase):
 		self.motor_names += ["left_shoulder1", "left_shoulder2", "left_elbow"]
 		self.motor_power += [75, 75, 75]
 		self.motors = [self.jdict[n] for n in self.motor_names]
-		if self.random_yaw:
-			cpose = cpp_household.Pose()
-			yaw = self.np_random.uniform(low=-3.14, high=3.14)
-			if self.random_lean and self.np_random.randint(2)==0:
-				cpose.set_xyz(0, 0, 1.4)
-				if self.np_random.randint(2)==0:
-					pitch = np.pi/2
-					cpose.set_xyz(0, 0, 0.45)
-				else:
-					pitch = np.pi*3/2
-					cpose.set_xyz(0, 0, 0.25)
-				roll = 0
-				cpose.set_rpy(roll, pitch, yaw)
-			else:
-				cpose.set_xyz(0, 0, 1.4)
-				cpose.set_rpy(0, 0, yaw)  # just face random direction, but stay straight otherwise
-			self.cpp_robot.set_pose_and_speed(cpose, 0,0,0)
+		# if self.random_yaw: # TODO: Make leaning work as soon as the rest works
+		# 	cpose = cpp_household.Pose()
+		# 	yaw = self.np_random.uniform(low=-3.14, high=3.14)
+		# 	if self.random_lean and self.np_random.randint(2)==0:
+		# 		cpose.set_xyz(0, 0, 1.4)
+		# 		if self.np_random.randint(2)==0:
+		# 			pitch = np.pi/2
+		# 			cpose.set_xyz(0, 0, 0.45)
+		# 		else:
+		# 			pitch = np.pi*3/2
+		# 			cpose.set_xyz(0, 0, 0.25)
+		# 		roll = 0
+		# 		cpose.set_rpy(roll, pitch, yaw)
+		# 	else:
+		# 		cpose.set_xyz(0, 0, 1.4)
+		# 		cpose.set_rpy(0, 0, yaw)  # just face random direction, but stay straight otherwise
+		# 	self.cpp_robot.set_pose_and_speed(cpose, 0,0,0)
 		self.initial_z = 0.8
 
 	random_yaw = False
@@ -219,8 +229,9 @@ class PybulletHumanoid(PybulletForwardWalkersBase):
 
 	def apply_action(self, a):
 		assert( np.isfinite(a).all() )
+		force_gain = 1.2
 		for i, m, power in zip(range(17), self.motors, self.motor_power):
-			m.set_motor_torque( float(power*self.power*np.clip(a[i], -1, +1)) )
+			m.set_motor_torque(float(force_gain * power*self.power*np.clip(a[i], -1, +1)) )
 
 	def alive_bonus(self, z, pitch):
 		return +2 if z > 0.78 else -1   # 2 here because 17 joints produce a lot of electricity cost just from policy noise, living must be better than dying
