@@ -1,18 +1,18 @@
-from pybulletgym.gym_forward_walkers import RoboschoolHumanoid
-#from roboschool.scene_abstract import cpp_household
+from pybulletgym.gym_forward_walkers import PybulletHumanoid
+#from Pybullet.scene_abstract import cpp_household
 import numpy as np
 import os
 
-class RoboschoolHumanoidFlagrun(RoboschoolHumanoid):
+class PybulletHumanoidFlagrun(PybulletHumanoid):
 	random_yaw = True
 
 	def create_single_player_scene(self):
-		s = RoboschoolHumanoid.create_single_player_scene(self)
+		s = PybulletHumanoid.create_single_player_scene(self)
 		s.zero_at_running_strip_start_line = False
 		return s
 
 	def robot_specific_reset(self):
-		RoboschoolHumanoid.robot_specific_reset(self)
+		PybulletHumanoid.robot_specific_reset(self)
 		self.flag_reposition()
 
 	def flag_reposition(self):
@@ -27,22 +27,22 @@ class RoboschoolHumanoidFlagrun(RoboschoolHumanoid):
 
 	def calc_state(self):
 		self.flag_timeout -= 1
-		state = RoboschoolHumanoid.calc_state(self)
+		state = PybulletHumanoid.calc_state(self)
 		if self.walk_target_dist < 1 or self.flag_timeout <= 0:
 			self.flag_reposition()
-			state = RoboschoolHumanoid.calc_state(self)  # caclulate state again, against new flag pos
+			state = PybulletHumanoid.calc_state(self)  # caclulate state again, against new flag pos
 			self.potential = self.calc_potential()	   # avoid reward jump
 		return state
 
-class RoboschoolHumanoidFlagrunHarder(RoboschoolHumanoidFlagrun):
+class PybulletHumanoidFlagrunHarder(PybulletHumanoidFlagrun):
 	random_lean = True  # can fall on start
 
 	def __init__(self):
-		RoboschoolHumanoidFlagrun.__init__(self)
+		PybulletHumanoidFlagrun.__init__(self)
 		self.electricity_cost /= 4   # don't care that much about electricity, just stand up!
 
 	def robot_specific_reset(self):
-		RoboschoolHumanoidFlagrun.robot_specific_reset(self)
+		PybulletHumanoidFlagrun.robot_specific_reset(self)
 		cpose = cpp_household.Pose()
 		cpose.set_rpy(0, 0, 0)
 		cpose.set_xyz(-1.5, 0, 0.05)
@@ -90,7 +90,7 @@ class RoboschoolHumanoidFlagrunHarder(RoboschoolHumanoidFlagrun):
 		# 1.0 alive bonus on the ground z==0, potential is 100, leak (1-0.99)*100==1.0
 		#
 		# Why robot whould stand up: to receive 100 points in potential field difference.
-		flag_running_progress = RoboschoolHumanoid.calc_potential(self)
+		flag_running_progress = PybulletHumanoid.calc_potential(self)
 
 		# This disables crawl.
 		if self.body_xyz[2] < 0.8:

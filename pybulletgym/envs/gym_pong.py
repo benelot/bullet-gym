@@ -1,5 +1,5 @@
-from roboschool.scene_abstract import Scene, cpp_household
-from roboschool.multiplayer import SharedMemoryClientEnv
+from Pybullet.scene_abstract import Scene, cpp_household
+from Pybullet.multiplayer import SharedMemoryClientEnv
 import gym, gym.spaces, gym.utils, gym.utils.seeding
 import numpy as np
 import os, sys
@@ -23,7 +23,7 @@ class PongScene(Scene):
         if self.score_right + self.score_left > 0:
             sys.stdout.write("%i:%i " % (self.score_left, self.score_right))
             sys.stdout.flush()
-        self.mjcf = self.cpp_world.load_mjcf(os.path.join(os.path.dirname(__file__), "models_robot/roboschool_pong.xml"))
+        self.mjcf = self.cpp_world.load_mjcf(os.path.join(os.path.dirname(__file__), "models_robot/Pybullet_pong.xml"))
         dump = 0
         for r in self.mjcf:
             if dump: print("ROBOT '%s'" % r.root_part.name)
@@ -139,7 +139,7 @@ class PongSceneMultiplayer(PongScene):
 
 # -- Environment itself here --
 
-class RoboschoolPong(gym.Env, SharedMemoryClientEnv):
+class PybulletPong(gym.Env, SharedMemoryClientEnv):
     metadata = {
         'render.modes': ['human', 'rgb_array'],
         'video.frames_per_second' : 60
