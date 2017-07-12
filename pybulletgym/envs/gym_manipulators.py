@@ -4,13 +4,12 @@ import gym, gym.spaces, gym.utils, gym.utils.seeding
 import numpy as np
 import os, sys
 
-
 class PybulletReacher(PybulletMujocoXmlEnv):
 	def __init__(self):
 		PybulletMujocoXmlEnv.__init__(self, 'reacher.xml', 'body0', action_dim=2, obs_dim=9)
 
 	def create_single_player_scene(self):
-		return SingleRobotEmptyScene(gravity=9.81, timestep=0.0020, frame_skip=8)
+		return SingleRobotEmptyScene(gravity=0.0, timestep=0.0165, frame_skip=1)
 
 	TARG_LIMIT = 0.27
 	def robot_specific_reset(self):

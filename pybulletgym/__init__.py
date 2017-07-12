@@ -25,53 +25,54 @@ register(
 	id='PybulletReacher-v0',
 	entry_point='envs.gym_manipulators:PybulletReacher',
 	max_episode_steps=150,
-	reward_threshold=-3.75,
+	reward_threshold=18.0,
 	)
 
 register(
 	id='PybulletPusher-v0',
 	entry_point='envs.gym_manipulators:PybulletPusher',
-	max_episode_steps=100,
-	reward_threshold=0.0,
+	max_episode_steps=150,
+	reward_threshold=18.0,
 )
 
 register(
 	id='PybulletThrower-v0',
 	entry_point='envs.gym_manipulators:PybulletThrower',
 	max_episode_steps=100,
-	reward_threshold=0.0,
+	reward_threshold=18.0,
 )
 
 register(
 	id='PybulletStriker-v0',
 	entry_point='envs.gym_manipulators:PybulletStriker',
 	max_episode_steps=100,
-	reward_threshold=0.0,
+	reward_threshold=18.0,
 )
 
 register(
 	id='PybulletHopper-v0',
 	entry_point='envs.gym_forward_walkers:PybulletHopper',
 	max_episode_steps=1000,
-	reward_threshold=3800.0	#~12 jumps
+	reward_threshold=2500.0
 	)
 register(
 	id='PybulletWalker2d-v0',
 	entry_point='envs.gym_forward_walkers:PybulletWalker2d',
 	max_episode_steps=1000,
+	reward_threshold=2500.0
 	)
 register(
 	id='PybulletHalfCheetah-v0',
 	entry_point='envs.gym_forward_walkers:PybulletHalfCheetah',
 	max_episode_steps=1000,
-	reward_threshold=4800.0
+	reward_threshold=3000.0
 	)
 
 register(
 	id='PybulletAnt-v0',
 	entry_point='envs.gym_forward_walkers:PybulletAnt',
 	max_episode_steps=1000,
-	reward_threshold=6000.0
+	reward_threshold=2500.0
 	)
 
 register(
