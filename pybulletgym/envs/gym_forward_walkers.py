@@ -51,34 +51,28 @@ class PybulletForwardWalkersBase(PybulletMujocoXmlEnv):
 
 		body_pose = self.robot_body.pose()
 		parts_xyz = np.array( [p.pose().xyz() for p in self.parts.values()] ).flatten()
-		self.body_xyz = body_pose.xyz()
-		#self.body_xyz = (parts_xyz[0::3].mean(), parts_xyz[1::3].mean(), body_pose.xyz()[2])  # torso z is more informative than mean z
+		self.body_xyz = (parts_xyz[0::3].mean(), parts_xyz[1::3].mean(), body_pose.xyz()[2])  # torso z is more informative than mean z
 		self.body_rpy = body_pose.rpy()
 		z = self.body_xyz[2]
 		r, p, yaw = self.body_rpy
-		(qx, qy, qz, qw) = body_pose.orientation()
 		if self.initial_z==None:
 			self.initial_z = z
 		self.walk_target_theta = np.arctan2( self.walk_target_y - self.body_xyz[1], self.walk_target_x - self.body_xyz[0] )
 		self.walk_target_dist  = np.linalg.norm( [self.walk_target_y - self.body_xyz[1], self.walk_target_x - self.body_xyz[0]] )
 		angle_to_target = self.walk_target_theta - yaw
 
-		# rot_speed = np.array(
-		# 	[[np.cos(-yaw), -np.sin(-yaw), 0],
-		# 	 [np.sin(-yaw),  np.cos(-yaw), 0],
-		# 	 [		   0,			 0, 1]]
-		# 	)
-		# vx, vy, vz = np.dot(rot_speed, self.robot_body.speed())  # rotate speed back to body point of view
-		(vx, vy, vz) = self.robot_body.speed()
+		rot_speed = np.array(
+			[[np.cos(-yaw), -np.sin(-yaw), 0],
+			 [np.sin(-yaw),  np.cos(-yaw), 0],
+			 [		   0,			 0, 1]]
+			)
+		vx, vy, vz = np.dot(rot_speed, self.robot_body.speed())  # rotate speed back to body point of view
 
 		more = np.array([
 			z-self.initial_z,
-			# np.sin(angle_to_target), np.cos(angle_to_target),
-			0.1*vx, 0.1*vy, 0.1*vz,	# 0.3 is just scaling typical speed into -1..+1, no physical sense here
-			# r, p
-			qx,qy,qz,qw #TODO: Update this for flagrun after pull-requesting
-		], dtype=np.float32)
-		# #								  8   +  34 +         2
+			np.sin(angle_to_target), np.cos(angle_to_target),
+			0.3*vx, 0.3*vy, 0.3*vz,	# 0.3 is just scaling typical speed into -1..+1, no physical sense here
+			r, p], dtype=np.float32)
 		return np.clip( np.concatenate([more] + [j] + [self.feet_contact]), -5, +5)
 
 	def calc_potential(self):
@@ -111,9 +105,7 @@ class PybulletForwardWalkersBase(PybulletMujocoXmlEnv):
 
 		feet_collision_cost = 0.0
 		for i,f in enumerate(self.feet):
-
 			contact_ids = set((x[2], x[4]) for x in f.contact_list())
-				
 			#print("CONTACT OF '%s' WITH %s" % (f.name, ",".join(contact_names)) )
 			self.feet_contact[i] = 1.0 if (self.ground_ids & contact_ids) else 0.0
 			if contact_ids - self.ground_ids:
@@ -177,7 +169,7 @@ class PybulletHalfCheetah(PybulletForwardWalkersBase):
 class PybulletAnt(PybulletForwardWalkersBase):
 	foot_list = ['front_left_foot', 'front_right_foot', 'left_back_foot', 'right_back_foot']
 	def __init__(self):
-		PybulletForwardWalkersBase.__init__(self, "ant.xml", "torso", action_dim=8, obs_dim=28, power=2.5)
+		PybulletForwardWalkersBase.__init__(self, "ant.xml", "torso", action_dim=8, obs_dim=28, power=10.5)
 	def alive_bonus(self, z, pitch):
 		return +1 if z > 0.26 else -1  # 0.25 is central sphere rad, die if it scrapes the ground
 
@@ -189,7 +181,7 @@ class PybulletHumanoid(PybulletForwardWalkersBase):
 	foot_list = ["right_foot", "left_foot"]  # "left_hand", "right_hand"
 
 	def __init__(self):
-		PybulletForwardWalkersBase.__init__(self, 'humanoid_symmetric.xml', 'torso', action_dim=17, obs_dim=44, power=0.082)
+		PybulletForwardWalkersBase.__init__(self, 'humanoid_symmetric.xml', 'torso', action_dim=17, obs_dim=44, power=0.41)
 		# 17 joints, 4 of them important for walking (hip, knee), others may as well be turned off, 17/4 = 4.25
 		self.electricity_cost  = 4.25*PybulletForwardWalkersBase.electricity_cost
 		self.stall_torque_cost = 4.25*PybulletForwardWalkersBase.stall_torque_cost

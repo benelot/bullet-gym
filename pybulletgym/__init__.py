@@ -55,25 +55,25 @@ register(
 	max_episode_steps=1000,
 	reward_threshold=3800.0	#~12 jumps
 	)
-#register(
-#	id='RoboschoolWalker2d-v0',
-#	entry_point='roboschool:RoboschoolWalker2d',
-#	max_episode_steps=1000,
-#	)
-#register(
-#	id='RoboschoolHalfCheetah-v0',
-#	entry_point='roboschool:RoboschoolHalfCheetah',
-#	max_episode_steps=1000,
-#	reward_threshold=4800.0
-#	)
-#
-#register(
-#	id='RoboschoolAnt-v0',
-#	entry_point='roboschool:RoboschoolAnt',
-#	max_episode_steps=1000,
-#	reward_threshold=6000.0
-#	)
-#
+register(
+	id='PybulletWalker2d-v0',
+	entry_point='envs.gym_forward_walkers:PybulletWalker2d',
+	max_episode_steps=1000,
+	)
+register(
+	id='PybulletHalfCheetah-v0',
+	entry_point='envs.gym_forward_walkers:PybulletHalfCheetah',
+	max_episode_steps=1000,
+	reward_threshold=4800.0
+	)
+
+register(
+	id='PybulletAnt-v0',
+	entry_point='envs.gym_forward_walkers:PybulletAnt',
+	max_episode_steps=1000,
+	reward_threshold=6000.0
+	)
+
 register(
 	id='PybulletHumanoid-v0',
 	entry_point='envs.gym_forward_walkers:PybulletHumanoid',
