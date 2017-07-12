@@ -25,8 +25,8 @@ class PybulletReacher(PybulletMujocoXmlEnv):
 
 	def apply_action(self, a):
 		assert( np.isfinite(a).all() )
-		self.central_joint.set_motor_torque( 0.05 * a[0]) #0.05*float(np.clip(a[0], -1, +1)) )
-		self.elbow_joint.set_motor_torque( 0.05 * a[1]) # 0.05*float(np.clip(a[1], -1, +1)) )
+		self.central_joint.set_motor_torque( 0.05*float(np.clip(a[0], -1, +1)) )
+		self.elbow_joint.set_motor_torque( 0.05*float(np.clip(a[1], -1, +1)) )
 
 	def calc_state(self):
 		theta,	 self.theta_dot = self.central_joint.current_relative_position()

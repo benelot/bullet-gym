@@ -82,13 +82,13 @@ class PybulletMujocoXmlEnv(gym.Env):
 					parts[self.robot_name] = BodyPart(self.robot_name, bodies, 0, -1)
 					self.robot_body = parts[self.robot_name]
 
+				if joint_name[:6] == "ignore":
+					Joint(joint_name, bodies, i, j).disable_motor()
+					continue
+
 				if joint_name[:8] != "jointfix":
 					joints[joint_name] = Joint(joint_name, bodies, i, j)
 					ordered_joints.append(joints[joint_name])
-
-					if joint_name[:6] == "ignore":
-						joints[joint_name].disable_motor()
-						continue
 
 					joints[joint_name].power_coef = 100.0
 
