@@ -10,8 +10,6 @@ The following environments are available to be run with the agents:
 - CartPole Environment [[CartPolev0Env](https://github.com/benelot/bullet-gym/blob/master/envs/CartPolev0Env.py)]
 - CartPole Environment with Detached Pole (2D control problem) [[Detached2DCartPolev0Env](https://github.com/benelot/bullet-gym/blob/master/envs/Detached2DCartPolev0Env.py)]
 - Motion Environment with different morphologies [[Motionv0Env](https://github.com/benelot/bullet-gym/blob/master/envs/Motionv0Env.py)]
-
-More environments are about to come:
 - Inverted Double Pendulum [[InvertedDoublePendulum-v1](https://gym.openai.com/envs/InvertedDoublePendulum-v1)]
 - Reacher [[Reacher-v1](https://gym.openai.com/envs/Reacher-v1)]
 - Half Cheetah [[HalfCheetah-v1](https://gym.openai.com/envs/HalfCheetah-v1)]
@@ -38,6 +36,8 @@ The following agents are available to be run with the environments:
 - [Keras-RL](https://github.com/matthiasplappert/keras-rl) - installation according to page
 - [OpenAI Gym](https://github.com/openai/gym) - installation according to page
 
+
+<!-- 
 ## Quick-start
 
 Some examples running out of the box can be found at the root of this repository. The show*.sh scripts run an agent-environment combination with a pretrained agent showing its performance on the environment. To train an agent from scratch, the train*.sh scripts can be run. They run the agent-environment combination in training-mode. Removing the --gui flag in the scripts turns off the GUI output and makes the training headless.
@@ -67,3 +67,4 @@ A robot morphology (currently a snake and a phantomx robot morphology) is set ou
 - [showKerasDDPGMotionExample.sh (checkpoint missing)][trainKerasDDPGMotionExample.sh]
 - [showKerasNAFMotionExample.sh (checkpoint missing)][trainKerasNAFMotionExample.sh]
 
+ -->
