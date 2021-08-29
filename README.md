@@ -1,4 +1,4 @@
-# Experimental stuff: For the stable release use https://github.com/benelot/pybullet-gym.
+# [DEPRECATED]: For the stable release use https://github.com/benelot/pybullet-gym.
 
 ### bullet-gym - The pybullet environment for use with the OpenAI Gym Reinforcement Learning Research Platform
 
